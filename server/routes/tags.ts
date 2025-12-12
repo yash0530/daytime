@@ -16,4 +16,14 @@ tags.get('/', async (c) => {
     return c.json(userTags);
 });
 
+tags.delete('/:id', async (c) => {
+    const user = c.get('user');
+    const id = c.req.param('id');
+    const tag = await Tag.findOneAndDelete({ _id: id, user: user.id });
+    if (!tag) {
+        return c.json({ error: 'Tag not found' }, 404);
+    }
+    return c.json({ message: 'Tag deleted' });
+});
+
 export default tags;

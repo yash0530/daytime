@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { API_URL } from './config';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import Visualization from './pages/Visualization';
 import ActivityLogger from './components/ActivityLogger';
 import ActivityList from './components/ActivityList';
 import CalendarView from './components/CalendarView';
@@ -19,13 +21,14 @@ const Dashboard = () => {
   const { logout, user } = useAuth();
   const [refreshTrigger, setRefreshTrigger] = useState(0);
   const [activities, setActivities] = useState([]);
+  const [startDate, setStartDate] = useState(new Date().toISOString().split('T')[0]);
+  const [endDate, setEndDate] = useState(new Date().toISOString().split('T')[0]);
   const token = localStorage.getItem('token');
 
   useEffect(() => {
     const fetchActivities = async () => {
       try {
-        const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
-        const res = await fetch(`${apiUrl}/activities`, {
+        const res = await fetch(`${API_URL}/activities`, {
           headers: { 'Authorization': `Bearer ${token}` }
         });
         if (res.ok) {
@@ -39,6 +42,16 @@ const Dashboard = () => {
     fetchActivities();
   }, [refreshTrigger, token]);
 
+  const handleActivityDeleted = (id) => {
+    // Optimistic update
+    setActivities(prev => prev.filter(a => a._id !== id));
+
+    // Delayed refetch to allow DB consistency to settle while keeping UI responsive
+    setTimeout(() => {
+      setRefreshTrigger(c => c + 1);
+    }, 500);
+  };
+
   return (
     <div className="dashboard">
       <header className="dashboard-header">
@@ -49,6 +62,13 @@ const Dashboard = () => {
         </div>
       </header>
       <main className="dashboard-content">
+        <section className="viz-controls" style={{ marginBottom: 20, display: 'flex', gap: 10, alignItems: 'center' }}>
+          <label>Start: <input type="date" value={startDate} onChange={e => setStartDate(e.target.value)} /></label>
+          <label>End: <input type="date" value={endDate} onChange={e => setEndDate(e.target.value)} /></label>
+          <button onClick={() => window.open(`/visualize?start=${startDate}&end=${endDate}`, '_blank')}>
+            View Analytics
+          </button>
+        </section>
         <section className="logger-section">
           <ActivityLogger onActivityLogged={() => setRefreshTrigger(c => c + 1)} />
         </section>
@@ -61,7 +81,7 @@ const Dashboard = () => {
           </section>
         </div>
         <section className="list-section">
-          <ActivityList activities={activities} />
+          <ActivityList activities={activities} onActivityDeleted={handleActivityDeleted} />
         </section>
       </main>
     </div>
@@ -75,6 +95,11 @@ const App = () => {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/visualize" element={
+            <PrivateRoute>
+              <Visualization />
+            </PrivateRoute>
+          } />
           <Route
             path="/"
             element={

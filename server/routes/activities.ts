@@ -11,6 +11,12 @@ const activities = new Hono<{ Variables: Variables }>();
 
 activities.use('*', authMiddleware);
 
+activities.get('/tags', async (c) => {
+    const user = c.get('user');
+    const tags = await Tag.find({ user: user.id });
+    return c.json(tags);
+});
+
 activities.get('/', async (c) => {
     const user = c.get('user');
     const userActivities = await Activity.find({ user: user.id })
@@ -53,6 +59,16 @@ activities.post('/', async (c) => {
     const populatedActivity = await activity.populate('tags');
 
     return c.json(populatedActivity, 201);
+});
+
+activities.delete('/:id', async (c) => {
+    const user = c.get('user');
+    const id = c.req.param('id');
+    const activity = await Activity.findOneAndDelete({ _id: id, user: user.id });
+    if (!activity) {
+        return c.json({ error: 'Activity not found' }, 404);
+    }
+    return c.json({ message: 'Activity deleted' });
 });
 
 export default activities;

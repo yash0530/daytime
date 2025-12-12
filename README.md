@@ -1,65 +1,95 @@
-# Daytime Project Specification
+# Daytime - Time Tracking Application
 
 ## Overview
-Daytime is a mobile-friendly web application designed to help users track and visualize their daily activities. The application emphasizes a clean, "pristine white" aesthetic and provides intuitive tools for logging time, managing tags, and analyzing productivity through calendars and graphs.
+Daytime is a premium, mobile-friendly time tracking application with a modern dark-mode interface. Track activities, visualize productivity trends, and manage your time with an elegant, glassmorphism-inspired design.
 
 ## Core Features
 
 ### 1. Authentication
--   **Login/Signup Screen**: Simple, secure entry point.
--   **User isolation**: Each user has their own private data.
+- **Modern Auth Pages**: Centered card design with gradient accents
+- **JWT-based Security**: Token-based authentication
+- **User Isolation**: Private data per user
 
 ### 2. Activity Logging
--   **Input Interface**:
-    -   Users can enter an activity description (e.g., "Worked", "Watched F1").
-    -   Users can specify duration (e.g., "2 hours", "30 mins").
-    -   **Tags**: Users can assign tags. New tags are created automatically upon first use.
--   **Recent/Recurring**: Previously used activities/tags appear as suggestions or a list for quick entry.
+- **Activity Input**: Description, duration (minutes), and category
+- **Smart Categories**: Auto-created on first use with autocomplete suggestions
+- **Activity Management**: 
+  - Sleek activity cards with hover effects
+  - **Delete Confirmation**: Animated modal with keyboard support
 
-### 3. Visualization & Dashboard
--   **Calendar View**:
-    -   Full calendar support showing activity summaries per day.
-    -   Monthly and weekly views.
--   **Data Analytics**:
-    -   **Bar Graphs**: Compare duration of different tags/activities.
-    -   **Line Graphs**: Track trends over time (e.g., "Work" hours over the last 7 days).
+### 3. Dashboard (`/`)
+- **Calendar View**: Monthly grid with activity indicators and color dots
+- **Time by Category**: Bar chart showing minutes per category
+- **Activity Over Time**: Line chart showing daily productivity trends
+- **Recent Activities**: Scrollable list with edit/delete actions
 
-### 4. UI/UX Design
--   **Aesthetic**: "Pristine white", minimalist, clean typography.
--   **Responsiveness**: Fully optimized for mobile devices (touch-friendly inputs, readable graphs on small screens).
+### 4. Analytics Dashboard (`/visualize`)
+- **Time Range Selector**: Last 3/7/30 days or custom date range
+- **Activity by Day**: Stacked bar chart with category breakdown
+- **Time by Category**: Donut chart showing time distribution
+- **Productivity Trends**: Area chart showing activity patterns
+
+## Design System
+
+### Color Palette
+| Token | Value | Usage |
+|-------|-------|-------|
+| `--bg-primary` | `#0f0f1a` | Page background |
+| `--bg-card` | `rgba(255,255,255,0.05)` | Card backgrounds |
+| `--accent-purple` | `#667eea` | Primary accent |
+| `--accent-pink` | `#f093fb` | Secondary accent |
+| `--accent-cyan` | `#00d4ff` | Highlights |
+| `--accent-green` | `#38ef7d` | Success states |
+
+### Typography
+- **Font**: Inter (Google Fonts)
+- **Weights**: 400 (regular), 500 (medium), 600 (semi-bold), 700 (bold)
+
+### Design Elements
+- **Glassmorphism**: Blur effects with translucent backgrounds
+- **Gradients**: Purple-to-pink primary gradient
+- **Animations**: Smooth transitions (0.15s-0.5s) and hover effects
+- **Cards**: Rounded corners (16-20px) with subtle borders
+- **Dark Theme Tooltips**: Consistent dark styling for chart tooltips
 
 ## Technical Architecture
 
 ### Stack
--   **Runtime**: Bun.js (Fast JavaScript runtime)
--   **Frontend**: React.js
--   **Database**: MongoDB
--   **Deployment**: Designed for easy deployment (e.g., standard Docker container or Bun-friendly hosts).
+| Layer | Technology |
+|-------|------------|
+| Runtime | Bun.js |
+| Backend | Hono.js |
+| Frontend | React 19 + Vite |
+| Database | MongoDB + Mongoose |
+| Charts | Recharts |
+| Styling | CSS Variables + Glassmorphism |
 
-### Data Model (Conceptual)
+### API Endpoints
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/api/auth/register` | Register user |
+| POST | `/api/auth/login` | Login, returns JWT |
+| GET | `/api/activities` | Get user activities |
+| POST | `/api/activities` | Create activity |
+| DELETE | `/api/activities/:id` | Delete activity |
+| GET | `/api/tags` | Get user categories |
 
-#### User
--   `_id`: ObjectId
--   `username`: String
--   `passwordHash`: String
+### Data Model
+- **User**: `_id`, `username`, `passwordHash`
+- **Tag** (Category): `_id`, `userId`, `name`, `color`
+- **Activity**: `_id`, `userId`, `description`, `durationMinutes`, `date`, `tags[]`
 
-#### Tag
--   `_id`: ObjectId
--   `userId`: ObjectId (Ref -> User)
--   `name`: String (e.g., "Work", "Entertainment", "Study")
--   `color`: String (Hex code for visualization)
+## Running Locally
 
-#### Activity
--   `_id`: ObjectId
--   `userId`: ObjectId (Ref -> User)
--   `description`: String
--   `durationMinutes`: Number
--   `date`: Date
--   `tags`: [ObjectId] (Ref -> Tag)
+```bash
+# Start MongoDB
+mongod
 
-## Development Roadmap
-1.  **Setup**: Initialize Bun + React project structure.
-2.  **Backend Core**: Setup API for Auth and Activities.
-3.  **Frontend Core**: Build Login and basic Logger interface.
-4.  **Data Viz**: Integrate charting library (e.g., Recharts or Chart.js) and Calendar component.
-5.  **Refinement**: Apply "pristine white" styling and mobile optimizations.
+# Start Server
+cd server && bun run index.ts
+
+# Start Client  
+cd client && npm run dev
+```
+
+Open http://localhost:5173
