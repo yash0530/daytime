@@ -7,7 +7,7 @@ MongoDB schemas used by the Daytime application.
 ## Entity Relationship Diagram
 
 ```mermaid
-ERDiagram
+erDiagram
     USER ||--o{ ACTIVITY : creates
     USER ||--o{ TAG : owns
     USER ||--o| TIMER : has_active
