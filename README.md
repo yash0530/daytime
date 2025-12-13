@@ -17,13 +17,20 @@ Daytime is a premium, mobile-friendly time tracking application with a modern da
   - Sleek activity cards with hover effects
   - **Delete Confirmation**: Animated modal with keyboard support
 
-### 3. Dashboard (`/`)
+### 3. Timer / Stopwatch Mode
+- **Real-time Tracking**: Start/stop timer instead of manual duration entry
+- **Pause/Resume**: Full timer control with state persistence
+- **Background Persistence**: Timer survives page refreshes via localStorage + server sync
+- **Pomodoro Mode**: Optional 25min work / 5min break cycles with session tracking
+- **Auto Activity Creation**: Stopped timers automatically create activity logs
+
+### 4. Dashboard (`/`)
 - **Calendar View**: Monthly grid with activity indicators and color dots
 - **Time by Category**: Bar chart showing minutes per category
 - **Activity Over Time**: Line chart showing daily productivity trends
 - **Recent Activities**: Scrollable list with edit/delete actions
 
-### 4. Analytics Dashboard (`/visualize`)
+### 5. Analytics Dashboard (`/visualize`)
 - **Time Range Selector**: Last 3/7/30 days or custom date range
 - **Activity by Day**: Stacked bar chart with category breakdown
 - **Time by Category**: Donut chart showing time distribution
@@ -73,11 +80,18 @@ Daytime is a premium, mobile-friendly time tracking application with a modern da
 | POST | `/api/activities` | Create activity |
 | DELETE | `/api/activities/:id` | Delete activity |
 | GET | `/api/tags` | Get user categories |
+| GET | `/api/timer` | Get active timer state |
+| POST | `/api/timer/start` | Start new timer |
+| POST | `/api/timer/pause` | Pause active timer |
+| POST | `/api/timer/resume` | Resume paused timer |
+| POST | `/api/timer/stop` | Stop timer & create activity |
+| PATCH | `/api/timer` | Update timer details |
 
 ### Data Model
 - **User**: `_id`, `username`, `passwordHash`
 - **Tag** (Category): `_id`, `userId`, `name`, `color`
 - **Activity**: `_id`, `userId`, `description`, `durationMinutes`, `date`, `tags[]`
+- **Timer**: `_id`, `userId`, `description`, `tagNames[]`, `startTime`, `pausedDuration`, `isPaused`, `mode`, `pomodoroState`
 
 ## Running Locally
 

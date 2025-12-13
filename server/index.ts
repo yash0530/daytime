@@ -17,6 +17,7 @@ mongoose.connect(MONGODB_URI)
 import authRoutes from './routes/auth';
 import activityRoutes from './routes/activities';
 import tagRoutes from './routes/tags';
+import timerRoutes from './routes/timer';
 
 // Routes
 app.get('/', (c) => {
@@ -26,6 +27,7 @@ app.get('/', (c) => {
 app.route('/api/auth', authRoutes);
 app.route('/api/activities', activityRoutes);
 app.route('/api/tags', tagRoutes);
+app.route('/api/timer', timerRoutes);
 
 const PORT = process.env.PORT || 3000;
 

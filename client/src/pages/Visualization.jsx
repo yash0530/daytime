@@ -193,7 +193,12 @@ const Visualization = () => {
                                         <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                                     ))}
                                 </Pie>
-                                <Tooltip contentStyle={tooltipStyle} cursor={{ fill: 'transparent' }} />
+                                <Tooltip
+                                    contentStyle={tooltipStyle}
+                                    cursor={{ fill: 'transparent' }}
+                                    itemStyle={{ color: '#fff' }}
+                                    labelStyle={{ color: '#fff', fontWeight: 600 }}
+                                />
                                 <Legend />
                             </PieChart>
                         </ResponsiveContainer>

@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { API_URL } from '../config';
 import { useAuth } from '../context/AuthContext';
+import Timer from './Timer';
 import '../suggestions.css';
 
 const ActivityLogger = ({ onActivityLogged }) => {
+    const [mode, setMode] = useState('manual'); // 'manual' or 'timer'
     const [description, setDescription] = useState('');
     const [duration, setDuration] = useState('');
     const [tags, setTags] = useState('');
@@ -96,45 +98,72 @@ const ActivityLogger = ({ onActivityLogged }) => {
 
     return (
         <div className="logger-container">
-            <h3>Log Activity</h3>
-            <form onSubmit={handleSubmit}>
-                <input
-                    type="text"
-                    placeholder="What did you do?"
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                    required
-                />
-                <input
-                    type="number"
-                    placeholder="Duration (minutes)"
-                    value={duration}
-                    onChange={(e) => setDuration(e.target.value)}
-                    required
-                />
-                <div style={{ position: 'relative' }}>
-                    <input
-                        type="text"
-                        placeholder="Category (e.g. Work, Exercise, Learning)"
-                        value={tags}
-                        onChange={handleTagChange}
-                        autoComplete="off"
-                        style={{ width: '100%', boxSizing: 'border-box' }}
-                    />
-                    {suggestions.length > 0 && (
-                        <ul className="suggestions-list">
-                            {suggestions.map(tag => (
-                                <li key={tag._id} onClick={() => addSuggestion(tag.name)} style={{ borderLeft: `4px solid ${tag.color}` }}>
-                                    {tag.name}
-                                </li>
-                            ))}
-                        </ul>
-                    )}
-                </div>
-                <button type="submit">Log It</button>
-            </form>
+            <div className="logger-mode-toggle">
+                <button
+                    type="button"
+                    className={`mode-toggle-btn ${mode === 'manual' ? 'active' : ''}`}
+                    onClick={() => setMode('manual')}
+                >
+                    Manual Entry
+                </button>
+                <button
+                    type="button"
+                    className={`mode-toggle-btn ${mode === 'timer' ? 'active' : ''}`}
+                    onClick={() => setMode('timer')}
+                >
+                    Timer Mode
+                </button>
+            </div>
+
+            {mode === 'timer' ? (
+                <Timer onActivityLogged={() => {
+                    fetchTags();
+                    if (onActivityLogged) onActivityLogged();
+                }} />
+            ) : (
+                <>
+                    <h3>Log Activity</h3>
+                    <form onSubmit={handleSubmit}>
+                        <input
+                            type="text"
+                            placeholder="What did you do?"
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
+                            required
+                        />
+                        <input
+                            type="number"
+                            placeholder="Duration (minutes)"
+                            value={duration}
+                            onChange={(e) => setDuration(e.target.value)}
+                            required
+                        />
+                        <div style={{ position: 'relative' }}>
+                            <input
+                                type="text"
+                                placeholder="Category (e.g. Work, Exercise, Learning)"
+                                value={tags}
+                                onChange={handleTagChange}
+                                autoComplete="off"
+                                style={{ width: '100%', boxSizing: 'border-box' }}
+                            />
+                            {suggestions.length > 0 && (
+                                <ul className="suggestions-list">
+                                    {suggestions.map(tag => (
+                                        <li key={tag._id} onClick={() => addSuggestion(tag.name)} style={{ borderLeft: `4px solid ${tag.color}` }}>
+                                            {tag.name}
+                                        </li>
+                                    ))}
+                                </ul>
+                            )}
+                        </div>
+                        <button type="submit">Log It</button>
+                    </form>
+                </>
+            )}
         </div>
     );
 };
 
 export default ActivityLogger;
+
