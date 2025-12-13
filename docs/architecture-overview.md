@@ -73,6 +73,7 @@ daytime/
 │   │   │   ├── CalendarView.jsx
 │   │   │   ├── ConfirmDialog.jsx
 │   │   │   ├── CreateTemplateModal.jsx
+│   │   │   ├── Journal.jsx
 │   │   │   ├── SaveTemplateModal.jsx
 │   │   │   ├── StatsView.jsx
 │   │   │   ├── TemplateList.jsx
@@ -82,6 +83,7 @@ daytime/
 │   │   ├── hooks/             # Custom React hooks
 │   │   │   └── useTimer.js
 │   │   ├── pages/             # Route-level components
+│   │   │   ├── JournalList.jsx
 │   │   │   ├── Login.jsx
 │   │   │   ├── Register.jsx
 │   │   │   └── Visualization.jsx
@@ -93,6 +95,7 @@ daytime/
 ├── server/                    # Backend application
 │   ├── models/                # Mongoose schemas
 │   │   ├── Activity.ts
+│   │   ├── Journal.ts
 │   │   ├── Tag.ts
 │   │   ├── Template.ts
 │   │   ├── Timer.ts
@@ -100,6 +103,7 @@ daytime/
 │   ├── routes/                # API route handlers
 │   │   ├── activities.ts
 │   │   ├── auth.ts
+│   │   ├── journals.ts
 │   │   ├── tags.ts
 │   │   ├── templates.ts
 │   │   └── timer.ts

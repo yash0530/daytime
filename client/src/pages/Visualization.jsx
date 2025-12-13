@@ -132,14 +132,22 @@ const Visualization = () => {
     return (
         <div className="visualization-page" style={pageStyle}>
             <header style={headerStyle}>
-                <h1 style={titleStyle}>Analytics Dashboard</h1>
+                <div style={headerTopRow}>
+                    <h1 style={titleStyle}>Analytics Dashboard</h1>
+                    <button onClick={() => navigate('/')} style={backBtnStyle}>
+                        ← Back to Dashboard
+                    </button>
+                </div>
                 <div className="controls" style={controlsStyle}>
-                    <button onClick={() => updateRange(3)} style={btnStyle}>Last 3 Days</button>
-                    <button onClick={() => updateRange(7)} style={btnStyle}>Last 7 Days</button>
-                    <button onClick={() => updateRange(30)} style={btnStyle}>Last 30 Days</button>
-                    <span style={{ color: 'rgba(255,255,255,0.3)', margin: '0 10px' }}>|</span>
-                    <label style={labelStyle}>Start: <input type="date" value={dateRange.start} onChange={e => setCustomRange(e.target.value, dateRange.end)} style={inputStyle} /></label>
-                    <label style={labelStyle}>End: <input type="date" value={dateRange.end} onChange={e => setCustomRange(dateRange.start, e.target.value)} style={inputStyle} /></label>
+                    <div style={{ display: 'flex', gap: '8px' }}>
+                        <button onClick={() => updateRange(3)} style={btnStyle}>Last 3 Days</button>
+                        <button onClick={() => updateRange(7)} style={btnStyle}>Last 7 Days</button>
+                        <button onClick={() => updateRange(30)} style={btnStyle}>Last 30 Days</button>
+                    </div>
+                    <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+                        <label style={labelStyle}>Start: <input type="date" value={dateRange.start} onChange={e => setCustomRange(e.target.value, dateRange.end)} style={inputStyle} /></label>
+                        <label style={labelStyle}>End: <input type="date" value={dateRange.end} onChange={e => setCustomRange(dateRange.start, e.target.value)} style={inputStyle} /></label>
+                    </div>
                 </div>
             </header>
 
@@ -259,17 +267,37 @@ const titleStyle = {
     WebkitBackgroundClip: 'text',
     WebkitTextFillColor: 'transparent',
     backgroundClip: 'text',
+    margin: 0
+};
+
+const headerTopRow = {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     marginBottom: '20px'
 };
 
 const controlsStyle = {
     display: 'flex',
-    gap: '10px',
+    gap: '16px',
     flexWrap: 'wrap',
-    alignItems: 'center'
+    alignItems: 'center',
+    justifyContent: 'space-between'
 };
 
 const btnStyle = {
+    padding: '10px 20px',
+    border: '1px solid rgba(255,255,255,0.15)',
+    backgroundColor: 'rgba(255,255,255,0.05)',
+    borderRadius: '50px',
+    cursor: 'pointer',
+    fontSize: '0.85rem',
+    transition: 'all 0.2s',
+    color: 'rgba(255,255,255,0.8)',
+    fontWeight: '500'
+};
+
+const backBtnStyle = {
     padding: '10px 20px',
     border: '1px solid rgba(255,255,255,0.15)',
     backgroundColor: 'rgba(255,255,255,0.05)',

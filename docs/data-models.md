@@ -12,6 +12,7 @@ erDiagram
     USER ||--o{ TAG : owns
     USER ||--o| TIMER : has_active
     USER ||--o{ TEMPLATE : owns
+    USER ||--o{ JOURNAL : writes
     ACTIVITY }o--o{ TAG : categorized_by
 
     USER {
@@ -64,6 +65,15 @@ erDiagram
         string description
         number durationMinutes
         stringArray tagNames
+        Date createdAt
+        Date updatedAt
+    }
+
+    JOURNAL {
+        ObjectId _id PK
+        ObjectId user FK
+        string content
+        string category
         Date createdAt
         Date updatedAt
     }
@@ -273,6 +283,36 @@ const templateSchema = new mongoose.Schema({
 - `tagNames` stored as strings (not ObjectId references) for simplicity
 - When used to create activity, tags are found/created dynamically
 - Allows templates to work even if original tags were deleted
+
+---
+
+## Journal Model
+
+**File**: `server/models/Journal.ts`
+
+```typescript
+const journalSchema = new mongoose.Schema({
+    content: { type: String, required: true },
+    category: { type: String, default: '' },
+    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
+}, { timestamps: true });
+```
+
+### Fields
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `_id` | ObjectId | Auto | Primary key |
+| `content` | String | Yes | Journal entry text |
+| `category` | String | No | Optional category for organization |
+| `user` | ObjectId | Yes | Owner reference |
+| `createdAt` | Date | Auto | Creation timestamp |
+| `updatedAt` | Date | Auto | Last update timestamp |
+
+### Design Notes
+- Simple note-taking model with optional categorization
+- Category is a free-form string (not a reference to Tag model)
+- Sorted by `createdAt` descending for chronological view
 
 ---
 

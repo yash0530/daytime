@@ -5,10 +5,11 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Visualization from './pages/Visualization';
+import JournalList from './pages/JournalList';
 import ActivityLogger from './components/ActivityLogger';
 import ActivityList from './components/ActivityList';
 import CalendarView from './components/CalendarView';
-import StatsView from './components/StatsView';
+import { CategoryChart, ActivityTimeline } from './components/StatsView';
 import TemplateList from './components/TemplateList';
 import './App.css';
 
@@ -64,12 +65,19 @@ const Dashboard = () => {
         </div>
       </header>
       <main className="dashboard-content">
-        <section className="viz-controls" style={{ marginBottom: 20, display: 'flex', gap: 10, alignItems: 'center' }}>
-          <label>Start: <input type="date" value={startDate} onChange={e => setStartDate(e.target.value)} /></label>
-          <label>End: <input type="date" value={endDate} onChange={e => setEndDate(e.target.value)} /></label>
-          <button onClick={() => window.open(`/visualize?start=${startDate}&end=${endDate}`, '_blank')}>
-            View Analytics
-          </button>
+        <section className="viz-controls">
+          <div style={{ display: 'flex', gap: '12px', alignItems: 'center', flexWrap: 'wrap' }}>
+            <label>Start: <input type="date" value={startDate} onChange={e => setStartDate(e.target.value)} /></label>
+            <label>End: <input type="date" value={endDate} onChange={e => setEndDate(e.target.value)} /></label>
+          </div>
+          <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+            <button onClick={() => window.open(`/visualize?start=${startDate}&end=${endDate}`, '_blank')}>
+              View Analytics
+            </button>
+            <button onClick={() => window.open('/journals', '_blank')}>
+              View Journals
+            </button>
+          </div>
         </section>
         <section className="logger-section">
           <ActivityLogger onActivityLogged={() => setRefreshTrigger(c => c + 1)} />
@@ -83,14 +91,21 @@ const Dashboard = () => {
           />
         </section>
 
+        {/* Calendar + Category Chart side by side */}
         <div className="viz-grid">
           <section className="calendar-section">
             <CalendarView activities={activities} />
           </section>
           <section className="stats-section">
-            <StatsView activities={activities} />
+            <CategoryChart activities={activities} />
           </section>
         </div>
+
+        {/* Activity Timeline full width */}
+        <section className="timeline-section">
+          <ActivityTimeline activities={activities} />
+        </section>
+
         <section className="list-section">
           <ActivityList
             activities={activities}
@@ -114,6 +129,11 @@ const App = () => {
           <Route path="/visualize" element={
             <PrivateRoute>
               <Visualization />
+            </PrivateRoute>
+          } />
+          <Route path="/journals" element={
+            <PrivateRoute>
+              <JournalList />
             </PrivateRoute>
           } />
           <Route

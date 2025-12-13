@@ -19,6 +19,7 @@ import activityRoutes from './routes/activities';
 import tagRoutes from './routes/tags';
 import timerRoutes from './routes/timer';
 import templateRoutes from './routes/templates';
+import journalRoutes from './routes/journals';
 
 // Routes
 app.get('/', (c) => {
@@ -30,6 +31,7 @@ app.route('/api/activities', activityRoutes);
 app.route('/api/tags', tagRoutes);
 app.route('/api/timer', timerRoutes);
 app.route('/api/templates', templateRoutes);
+app.route('/api/journals', journalRoutes);
 
 const PORT = process.env.PORT || 3000;
 

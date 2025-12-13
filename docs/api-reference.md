@@ -559,6 +559,87 @@ Create an activity from a template.
 
 ---
 
+## Journals Endpoints
+
+### GET `/journals`
+
+Get all journals for authenticated user (sorted by createdAt desc).
+
+**Headers:** `Authorization: Bearer <token>`
+
+**Success Response (200):**
+```json
+[
+  {
+    "_id": "507f1f77bcf86cd799439016",
+    "content": "Had a productive day working on the new feature...",
+    "category": "Work",
+    "user": "507f1f77bcf86cd799439010",
+    "createdAt": "2024-01-15T14:00:00.000Z",
+    "updatedAt": "2024-01-15T14:00:00.000Z"
+  }
+]
+```
+
+---
+
+### POST `/journals`
+
+Create a new journal entry.
+
+**Headers:** `Authorization: Bearer <token>`
+
+**Request Body:**
+```json
+{
+  "content": "Had a productive day working on the new feature...",
+  "category": "Work"  // optional
+}
+```
+
+**Success Response (201):**
+```json
+{
+  "_id": "507f1f77bcf86cd799439016",
+  "content": "Had a productive day working on the new feature...",
+  "category": "Work",
+  "user": "507f1f77bcf86cd799439010",
+  "createdAt": "2024-01-15T14:00:00.000Z"
+}
+```
+
+**Error Responses:**
+| Code | Body |
+|------|------|
+| 400 | `{ "error": "Content is required" }` |
+
+---
+
+### DELETE `/journals/:id`
+
+Delete a journal entry.
+
+**Headers:** `Authorization: Bearer <token>`
+
+**URL Parameters:**
+| Param | Type | Description |
+|-------|------|-------------|
+| `id` | string | Journal ObjectId |
+
+**Success Response (200):**
+```json
+{
+  "message": "Journal deleted"
+}
+```
+
+**Error Responses:**
+| Code | Body |
+|------|------|
+| 404 | `{ "error": "Journal not found" }` |
+
+---
+
 ## Error Response Format
 
 All error responses follow this format:

@@ -42,6 +42,7 @@ flowchart TB
 Dashboard
 ├── ActivityLogger
 │   ├── Timer (Timer Mode)
+│   ├── Journal (Journal Mode)
 │   └── Form (Manual Mode)
 ├── TemplateList
 │   └── CreateTemplateModal
@@ -61,6 +62,13 @@ Visualization
 └── ProductivityTrends (Area)
 ```
 
+### JournalList Page
+```
+JournalList
+├── JournalCards
+└── ConfirmDialog
+```
+
 ---
 
 ## Core Components
@@ -69,27 +77,28 @@ Visualization
 
 **File**: `components/ActivityLogger.jsx`
 
-**Purpose**: Entry point for logging activities with dual modes.
+**Purpose**: Entry point for logging activities with triple modes.
 
 **Props**:
 | Prop | Type | Description |
 |------|------|-------------|
 | `onActivityLogged` | `() => void` | Callback when activity is created |
+| `onJournalCreated` | `() => void` | Callback when journal is created |
 
 **State**:
 ```javascript
 {
-  mode: 'manual' | 'timer',   // Current input mode
-  description: string,         // Activity description
-  duration: string,            // Duration in minutes
-  tags: string,                // Comma-separated categories
-  availableTags: Tag[],        // Fetched from API
-  suggestions: Tag[]           // Filtered suggestions
+  mode: 'manual' | 'timer' | 'journal',  // Current input mode
+  description: string,                    // Activity description
+  duration: string,                       // Duration in minutes
+  tags: string,                           // Comma-separated categories
+  availableTags: Tag[],                   // Fetched from API
+  suggestions: Tag[]                      // Filtered suggestions
 }
 ```
 
 **Features**:
-- Mode toggle between Manual Entry and Timer Mode
+- Mode toggle between Manual Entry, Timer Mode, and Journal
 - Tag autocomplete with color indicators
 - Form validation
 
@@ -123,6 +132,36 @@ stateDiagram-v2
 - `.timer-display` - Base styling
 - `.timer-display.running` - Green border, pulse animation
 - `.timer-display.paused` - Pink border
+
+---
+
+### Journal
+
+**File**: `components/Journal.jsx`
+
+**Purpose**: Journal entry form for note-taking.
+
+**Props**:
+| Prop | Type | Description |
+|------|------|-------------|
+| `onJournalCreated` | `() => void` | Callback when journal is saved |
+
+**State**:
+```javascript
+{
+  content: string,          // Journal entry text
+  category: string,         // Optional category
+  loading: boolean,         // Submission state
+  availableTags: Tag[],     // For category suggestions
+  suggestions: Tag[]        // Filtered suggestions
+}
+```
+
+**Features**:
+- Multi-line textarea for journal content
+- Optional category input with autocomplete
+- Category suggestions from existing tags
+- Form validation (requires content)
 
 ---
 
@@ -355,6 +394,7 @@ flowchart TD
   <Route path="/login" element={<Login />} />
   <Route path="/register" element={<Register />} />
   <Route path="/visualize" element={<PrivateRoute><Visualization /></PrivateRoute>} />
+  <Route path="/journals" element={<PrivateRoute><JournalList /></PrivateRoute>} />
   <Route path="/" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
 </Routes>
 ```

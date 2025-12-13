@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { API_URL } from '../config';
 import { useAuth } from '../context/AuthContext';
 import Timer from './Timer';
+import Journal from './Journal';
 import '../suggestions.css';
 
-const ActivityLogger = ({ onActivityLogged }) => {
-    const [mode, setMode] = useState('manual'); // 'manual' or 'timer'
+const ActivityLogger = ({ onActivityLogged, onJournalCreated }) => {
+    const [mode, setMode] = useState('manual'); // 'manual', 'timer', or 'journal'
     const [description, setDescription] = useState('');
     const [duration, setDuration] = useState('');
     const [tags, setTags] = useState('');
@@ -113,12 +114,23 @@ const ActivityLogger = ({ onActivityLogged }) => {
                 >
                     Timer Mode
                 </button>
+                <button
+                    type="button"
+                    className={`mode-toggle-btn ${mode === 'journal' ? 'active' : ''}`}
+                    onClick={() => setMode('journal')}
+                >
+                    Journal
+                </button>
             </div>
 
             {mode === 'timer' ? (
                 <Timer onActivityLogged={() => {
                     fetchTags();
                     if (onActivityLogged) onActivityLogged();
+                }} />
+            ) : mode === 'journal' ? (
+                <Journal onJournalCreated={() => {
+                    if (onJournalCreated) onJournalCreated();
                 }} />
             ) : (
                 <>

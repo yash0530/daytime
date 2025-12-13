@@ -30,14 +30,22 @@ Daytime is a premium, mobile-friendly time tracking application with a modern da
 - **Template Library**: View, use, and manage saved templates in Quick Actions section
 - **One-Click Logging**: Use templates to instantly create activities
 
-### 5. Dashboard (`/`)
+### 5. Journal / Note-Taking
+- **Journal Tab**: Third tab in Activity Logger for quick note-taking
+- **Journal Entries**: Write thoughts, ideas, or notes with optional category
+- **Category Autocomplete**: Reuse existing categories for organization
+- **Journal View**: Dedicated page (`/journals`) showing all entries
+- **Chronological Order**: Entries displayed newest first
+- **Delete Support**: Remove journal entries with confirmation
+
+### 6. Dashboard (`/`)
 - **Calendar View**: Monthly grid with activity indicators and color dots
 - **Time by Category**: Bar chart showing minutes per category
 - **Activity Over Time**: Line chart showing daily productivity trends
 - **Recent Activities**: Scrollable list with save-template/delete actions
 - **Quick Actions**: Templates section for fast activity logging
 
-### 6. Analytics Dashboard (`/visualize`)
+### 7. Analytics Dashboard (`/visualize`)
 - **Time Range Selector**: Last 3/7/30 days or custom date range
 - **Activity by Day**: Stacked bar chart with category breakdown
 - **Time by Category**: Donut chart showing time distribution
@@ -99,6 +107,9 @@ Daytime is a premium, mobile-friendly time tracking application with a modern da
 | POST | `/api/templates` | Create new template |
 | DELETE | `/api/templates/:id` | Delete template |
 | POST | `/api/templates/:id/use` | Create activity from template |
+| GET | `/api/journals` | Get user journals (desc sorted) |
+| POST | `/api/journals` | Create journal entry |
+| DELETE | `/api/journals/:id` | Delete journal entry |
 
 ### Data Model
 - **User**: `_id`, `username`, `password` (bcrypt hashed)
@@ -106,6 +117,7 @@ Daytime is a premium, mobile-friendly time tracking application with a modern da
 - **Activity**: `_id`, `user`, `description`, `durationMinutes`, `date`, `tags[]`
 - **Timer**: `_id`, `user`, `description`, `tagNames[]`, `startTime`, `pausedDuration`, `isPaused`, `pausedAt`, `mode`, `pomodoroState`
 - **Template**: `_id`, `user`, `name`, `description`, `durationMinutes`, `tagNames[]`
+- **Journal**: `_id`, `user`, `content`, `category`, `createdAt`, `updatedAt`
 
 ## Running Locally
 

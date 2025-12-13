@@ -22,7 +22,6 @@ Enable users to set time goals per category:
 - Daily/weekly targets (e.g., "8 hours work", "1 hour exercise")
 - Visual progress indicators on dashboard
 - Streak tracking for consistent habits
-- Notifications when approaching or exceeding targets
 
 ### 3. Timer / Stopwatch Mode
 **Complexity**: Low-Medium | **Impact**: High
