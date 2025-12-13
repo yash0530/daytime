@@ -37,16 +37,16 @@ erDiagram
         string description
         number durationMinutes
         Date date
-        ObjectId[] tags FK
+        ObjectIdArray tags FK
         Date createdAt
         Date updatedAt
     }
 
     TIMER {
         ObjectId _id PK
-        ObjectId user FK_UK
+        ObjectId user UK
         string description
-        string[] tagNames
+        stringArray tagNames
         Date startTime
         number pausedDuration
         boolean isPaused
@@ -63,7 +63,7 @@ erDiagram
         string name
         string description
         number durationMinutes
-        string[] tagNames
+        stringArray tagNames
         Date createdAt
         Date updatedAt
     }
