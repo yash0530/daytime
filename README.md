@@ -24,13 +24,20 @@ Daytime is a premium, mobile-friendly time tracking application with a modern da
 - **Pomodoro Mode**: Optional 25min work / 5min break cycles with session tracking
 - **Auto Activity Creation**: Stopped timers automatically create activity logs
 
-### 4. Dashboard (`/`)
+### 4. Templates & Quick Actions
+- **Save as Template**: Save any activity as a reusable template for quick re-logging
+- **Create Custom Templates**: Build templates from scratch with custom name, description, duration, and categories
+- **Template Library**: View, use, and manage saved templates in Quick Actions section
+- **One-Click Logging**: Use templates to instantly create activities
+
+### 5. Dashboard (`/`)
 - **Calendar View**: Monthly grid with activity indicators and color dots
 - **Time by Category**: Bar chart showing minutes per category
 - **Activity Over Time**: Line chart showing daily productivity trends
-- **Recent Activities**: Scrollable list with edit/delete actions
+- **Recent Activities**: Scrollable list with save-template/delete actions
+- **Quick Actions**: Templates section for fast activity logging
 
-### 5. Analytics Dashboard (`/visualize`)
+### 6. Analytics Dashboard (`/visualize`)
 - **Time Range Selector**: Last 3/7/30 days or custom date range
 - **Activity by Day**: Stacked bar chart with category breakdown
 - **Time by Category**: Donut chart showing time distribution
@@ -86,12 +93,17 @@ Daytime is a premium, mobile-friendly time tracking application with a modern da
 | POST | `/api/timer/resume` | Resume paused timer |
 | POST | `/api/timer/stop` | Stop timer & create activity |
 | PATCH | `/api/timer` | Update timer details |
+| GET | `/api/templates` | Get user templates |
+| POST | `/api/templates` | Create new template |
+| DELETE | `/api/templates/:id` | Delete template |
+| POST | `/api/templates/:id/use` | Create activity from template |
 
 ### Data Model
 - **User**: `_id`, `username`, `passwordHash`
 - **Tag** (Category): `_id`, `userId`, `name`, `color`
 - **Activity**: `_id`, `userId`, `description`, `durationMinutes`, `date`, `tags[]`
 - **Timer**: `_id`, `userId`, `description`, `tagNames[]`, `startTime`, `pausedDuration`, `isPaused`, `mode`, `pomodoroState`
+- **Template**: `_id`, `userId`, `name`, `description`, `durationMinutes`, `tagNames[]`
 
 ## Running Locally
 

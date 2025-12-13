@@ -9,6 +9,7 @@ import ActivityLogger from './components/ActivityLogger';
 import ActivityList from './components/ActivityList';
 import CalendarView from './components/CalendarView';
 import StatsView from './components/StatsView';
+import TemplateList from './components/TemplateList';
 import './App.css';
 
 const PrivateRoute = ({ children }) => {
@@ -20,6 +21,7 @@ const PrivateRoute = ({ children }) => {
 const Dashboard = () => {
   const { logout, user } = useAuth();
   const [refreshTrigger, setRefreshTrigger] = useState(0);
+  const [templateRefreshTrigger, setTemplateRefreshTrigger] = useState(0);
   const [activities, setActivities] = useState([]);
   const [startDate, setStartDate] = useState(new Date().toISOString().split('T')[0]);
   const [endDate, setEndDate] = useState(new Date().toISOString().split('T')[0]);
@@ -72,6 +74,15 @@ const Dashboard = () => {
         <section className="logger-section">
           <ActivityLogger onActivityLogged={() => setRefreshTrigger(c => c + 1)} />
         </section>
+
+        {/* Quick Actions Section */}
+        <section className="quick-actions-section">
+          <TemplateList
+            key={templateRefreshTrigger}
+            onActivityCreated={() => setRefreshTrigger(c => c + 1)}
+          />
+        </section>
+
         <div className="viz-grid">
           <section className="calendar-section">
             <CalendarView activities={activities} />
@@ -81,12 +92,17 @@ const Dashboard = () => {
           </section>
         </div>
         <section className="list-section">
-          <ActivityList activities={activities} onActivityDeleted={handleActivityDeleted} />
+          <ActivityList
+            activities={activities}
+            onActivityDeleted={handleActivityDeleted}
+            onTemplateCreated={() => setTemplateRefreshTrigger(c => c + 1)}
+          />
         </section>
       </main>
     </div>
   );
 };
+
 
 const App = () => {
   return (

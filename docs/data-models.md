@@ -7,10 +7,11 @@ MongoDB schemas used by the Daytime application.
 ## Entity Relationship Diagram
 
 ```mermaid
-erDiagram
+ERDiagram
     USER ||--o{ ACTIVITY : creates
     USER ||--o{ TAG : owns
     USER ||--o| TIMER : has_active
+    USER ||--o{ TEMPLATE : owns
     ACTIVITY }o--o{ TAG : categorized_by
 
     USER {
@@ -52,6 +53,17 @@ erDiagram
         Date pausedAt
         string mode
         object pomodoroState
+        Date createdAt
+        Date updatedAt
+    }
+
+    TEMPLATE {
+        ObjectId _id PK
+        ObjectId user FK
+        string name
+        string description
+        number durationMinutes
+        string[] tagNames
         Date createdAt
         Date updatedAt
     }
@@ -227,6 +239,40 @@ if (!timer.isPaused) {
     elapsed += timer.pausedAt.getTime() - timer.startTime.getTime();
 }
 ```
+
+---
+
+## Template Model
+
+**File**: `server/models/Template.ts`
+
+```typescript
+const templateSchema = new mongoose.Schema({
+    name: { type: String, required: true },
+    description: { type: String, required: true },
+    durationMinutes: { type: Number, required: true },
+    tagNames: [{ type: String }],
+    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
+}, { timestamps: true });
+```
+
+### Fields
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `_id` | ObjectId | Auto | Primary key |
+| `name` | String | Yes | Template display name |
+| `description` | String | Yes | Activity description |
+| `durationMinutes` | Number | Yes | Default duration |
+| `tagNames` | String[] | No | Category names (stored as strings) |
+| `user` | ObjectId | Yes | Owner reference |
+| `createdAt` | Date | Auto | Creation timestamp |
+| `updatedAt` | Date | Auto | Last update timestamp |
+
+### Design Notes
+- `tagNames` stored as strings (not ObjectId references) for simplicity
+- When used to create activity, tags are found/created dynamically
+- Allows templates to work even if original tags were deleted
 
 ---
 

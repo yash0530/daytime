@@ -408,6 +408,124 @@ Toggle between work and break in Pomodoro mode.
 
 ---
 
+## Templates Endpoints
+
+### GET `/templates`
+
+Get all templates for authenticated user.
+
+**Headers:** `Authorization: Bearer <token>`
+
+**Success Response (200):**
+```json
+[
+  {
+    "_id": "507f1f77bcf86cd799439014",
+    "name": "Morning Workout",
+    "description": "30 min cardio + stretching",
+    "durationMinutes": 30,
+    "tagNames": ["Exercise", "Health"],
+    "user": "507f1f77bcf86cd799439010",
+    "createdAt": "2024-01-15T10:00:00.000Z"
+  }
+]
+```
+
+---
+
+### POST `/templates`
+
+Create a new template.
+
+**Headers:** `Authorization: Bearer <token>`
+
+**Request Body:**
+```json
+{
+  "name": "Morning Workout",
+  "description": "30 min cardio + stretching",
+  "durationMinutes": 30,
+  "tagNames": ["Exercise", "Health"]
+}
+```
+
+**Success Response (201):**
+```json
+{
+  "_id": "507f1f77bcf86cd799439014",
+  "name": "Morning Workout",
+  "description": "30 min cardio + stretching",
+  "durationMinutes": 30,
+  "tagNames": ["Exercise", "Health"],
+  "user": "507f1f77bcf86cd799439010"
+}
+```
+
+**Error Responses:**
+| Code | Body |
+|------|------|
+| 400 | `{ "error": "Name and description are required" }` |
+
+---
+
+### DELETE `/templates/:id`
+
+Delete a template.
+
+**Headers:** `Authorization: Bearer <token>`
+
+**URL Parameters:**
+| Param | Type | Description |
+|-------|------|-------------|
+| `id` | string | Template ObjectId |
+
+**Success Response (200):**
+```json
+{
+  "message": "Template deleted"
+}
+```
+
+**Error Responses:**
+| Code | Body |
+|------|------|
+| 404 | `{ "error": "Template not found" }` |
+
+---
+
+### POST `/templates/:id/use`
+
+Create an activity from a template.
+
+**Headers:** `Authorization: Bearer <token>`
+
+**URL Parameters:**
+| Param | Type | Description |
+|-------|------|-------------|
+| `id` | string | Template ObjectId |
+
+**Success Response (201):**
+```json
+{
+  "_id": "507f1f77bcf86cd799439015",
+  "description": "30 min cardio + stretching",
+  "durationMinutes": 30,
+  "date": "2024-01-15T09:00:00.000Z",
+  "tags": [
+    { "_id": "...", "name": "Exercise", "color": "#38ef7d" },
+    { "_id": "...", "name": "Health", "color": "#667eea" }
+  ],
+  "user": "507f1f77bcf86cd799439010"
+}
+```
+
+**Error Responses:**
+| Code | Body |
+|------|------|
+| 404 | `{ "error": "Template not found" }` |
+
+---
+
 ## Error Response Format
 
 All error responses follow this format:

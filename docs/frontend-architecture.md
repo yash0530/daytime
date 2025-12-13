@@ -43,9 +43,12 @@ Dashboard
 ├── ActivityLogger
 │   ├── Timer (Timer Mode)
 │   └── Form (Manual Mode)
+├── TemplateList
+│   └── CreateTemplateModal
 ├── CalendarView
 ├── StatsView
 └── ActivityList
+    ├── SaveTemplateModal
     └── ConfirmDialog
 ```
 
@@ -140,6 +143,66 @@ stateDiagram-v2
 - Delete button with confirmation
 - Tags displayed with colors
 - Duration badge
+
+---
+
+### TemplateList
+
+**File**: `components/TemplateList.jsx`
+
+**Purpose**: Display and manage activity templates.
+
+**Props**:
+| Prop | Type | Description |
+|------|------|-------------|
+| `onActivityCreated` | `() => void` | Callback when activity created from template |
+
+**Features**:
+- Grid display of saved templates
+- "New Template" button opens CreateTemplateModal
+- Use template button to create activity
+- Delete button with confirmation
+
+---
+
+### CreateTemplateModal
+
+**File**: `components/CreateTemplateModal.jsx`
+
+**Purpose**: Modal for creating new templates from scratch.
+
+**Props**:
+| Prop | Type | Description |
+|------|------|-------------|
+| `isOpen` | `boolean` | Visibility state |
+| `onClose` | `() => void` | Close handler |
+| `onCreated` | `(template) => void` | Created callback |
+
+**Features**:
+- Form with name, description, duration, categories
+- Category autocomplete with suggestions
+- Uses React Portal for proper z-index layering
+
+---
+
+### SaveTemplateModal
+
+**File**: `components/SaveTemplateModal.jsx`
+
+**Purpose**: Modal for saving an existing activity as a template.
+
+**Props**:
+| Prop | Type | Description |
+|------|------|-------------|
+| `isOpen` | `boolean` | Visibility state |
+| `onClose` | `() => void` | Close handler |
+| `onSaved` | `(template) => void` | Saved callback |
+| `activityData` | `object` | Activity to save as template |
+
+**Features**:
+- Pre-filled with activity data
+- User provides template name
+- Uses React Portal for proper z-index layering
 
 ---
 

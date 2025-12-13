@@ -153,6 +153,27 @@ Simple route returning all tags for the authenticated user.
 
 ---
 
+### Templates Routes (`/api/templates`)
+
+| Endpoint | Method | Auth | Description |
+|----------|--------|------|-------------|
+| `/` | GET | Yes | List user templates |
+| `/` | POST | Yes | Create template |
+| `/:id` | DELETE | Yes | Delete template |
+| `/:id/use` | POST | Yes | Create activity from template |
+
+**Create Activity from Template Flow:**
+1. Find template by ID
+2. For each tagName in template:
+   - Find existing tag OR create new with random color
+3. Create Activity document with current date
+4. Populate tags and return
+
+**Use Case:**
+Templates allow users to quickly log recurring activities without re-entering details.
+
+---
+
 ## Middleware
 
 ### Auth Middleware
