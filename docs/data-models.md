@@ -78,7 +78,7 @@ erDiagram
 ```typescript
 const userSchema = new mongoose.Schema({
     username: { type: String, required: true, unique: true },
-    passwordHash: { type: String, required: true }
+    password: { type: String, required: true }
 }, { timestamps: true });
 ```
 
@@ -88,7 +88,7 @@ const userSchema = new mongoose.Schema({
 |-------|------|----------|-------------|
 | `_id` | ObjectId | Auto | Primary key |
 | `username` | String | Yes | Unique identifier |
-| `passwordHash` | String | Yes | Bcrypt hash |
+| `password` | String | Yes | Bcrypt hash |
 | `createdAt` | Date | Auto | Creation timestamp |
 | `updatedAt` | Date | Auto | Last update timestamp |
 

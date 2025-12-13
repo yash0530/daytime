@@ -72,7 +72,10 @@ daytime/
 │   │   │   ├── ActivityLogger.jsx
 │   │   │   ├── CalendarView.jsx
 │   │   │   ├── ConfirmDialog.jsx
+│   │   │   ├── CreateTemplateModal.jsx
+│   │   │   ├── SaveTemplateModal.jsx
 │   │   │   ├── StatsView.jsx
+│   │   │   ├── TemplateList.jsx
 │   │   │   └── Timer.jsx
 │   │   ├── context/           # React context providers
 │   │   │   └── AuthContext.jsx
@@ -91,12 +94,14 @@ daytime/
 │   ├── models/                # Mongoose schemas
 │   │   ├── Activity.ts
 │   │   ├── Tag.ts
+│   │   ├── Template.ts
 │   │   ├── Timer.ts
 │   │   └── User.ts
 │   ├── routes/                # API route handlers
 │   │   ├── activities.ts
 │   │   ├── auth.ts
 │   │   ├── tags.ts
+│   │   ├── templates.ts
 │   │   └── timer.ts
 │   ├── middleware/            # Express-style middleware
 │   │   └── auth.ts
@@ -104,6 +109,7 @@ daytime/
 ├── docs/                      # Documentation
 └── README.md
 ```
+
 
 ---
 

@@ -89,49 +89,4 @@ templates.post('/:id/use', async (c) => {
     return c.json(populatedActivity, 201);
 });
 
-// Repeat yesterday's activities
-templates.post('/repeat-yesterday', async (c) => {
-    const user = c.get('user');
-
-    // Get yesterday's date range
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-
-    const yesterday = new Date(today);
-    yesterday.setDate(yesterday.getDate() - 1);
-
-    const yesterdayEnd = new Date(today);
-    yesterdayEnd.setMilliseconds(-1);
-
-    // Find yesterday's activities
-    const yesterdayActivities = await Activity.find({
-        user: user.id,
-        date: { $gte: yesterday, $lt: today }
-    }).populate('tags');
-
-    if (yesterdayActivities.length === 0) {
-        return c.json({ message: 'No activities found from yesterday', activities: [] });
-    }
-
-    // Clone each activity for today
-    const createdActivities = [];
-    for (const oldActivity of yesterdayActivities) {
-        const newActivity = new Activity({
-            description: oldActivity.description,
-            durationMinutes: oldActivity.durationMinutes,
-            date: new Date(),
-            tags: oldActivity.tags.map((t: any) => t._id),
-            user: user.id,
-        });
-        await newActivity.save();
-        const populated = await newActivity.populate('tags');
-        createdActivities.push(populated);
-    }
-
-    return c.json({
-        message: `Repeated ${createdActivities.length} activities from yesterday`,
-        activities: createdActivities
-    }, 201);
-});
-
 export default templates;

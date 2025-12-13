@@ -87,23 +87,25 @@ Daytime is a premium, mobile-friendly time tracking application with a modern da
 | POST | `/api/activities` | Create activity |
 | DELETE | `/api/activities/:id` | Delete activity |
 | GET | `/api/tags` | Get user categories |
+| DELETE | `/api/tags/:id` | Delete category |
 | GET | `/api/timer` | Get active timer state |
 | POST | `/api/timer/start` | Start new timer |
 | POST | `/api/timer/pause` | Pause active timer |
 | POST | `/api/timer/resume` | Resume paused timer |
 | POST | `/api/timer/stop` | Stop timer & create activity |
 | PATCH | `/api/timer` | Update timer details |
+| POST | `/api/timer/pomodoro/toggle` | Toggle Pomodoro work/break |
 | GET | `/api/templates` | Get user templates |
 | POST | `/api/templates` | Create new template |
 | DELETE | `/api/templates/:id` | Delete template |
 | POST | `/api/templates/:id/use` | Create activity from template |
 
 ### Data Model
-- **User**: `_id`, `username`, `passwordHash`
-- **Tag** (Category): `_id`, `userId`, `name`, `color`
-- **Activity**: `_id`, `userId`, `description`, `durationMinutes`, `date`, `tags[]`
-- **Timer**: `_id`, `userId`, `description`, `tagNames[]`, `startTime`, `pausedDuration`, `isPaused`, `mode`, `pomodoroState`
-- **Template**: `_id`, `userId`, `name`, `description`, `durationMinutes`, `tagNames[]`
+- **User**: `_id`, `username`, `password` (bcrypt hashed)
+- **Tag** (Category): `_id`, `user`, `name`, `color`
+- **Activity**: `_id`, `user`, `description`, `durationMinutes`, `date`, `tags[]`
+- **Timer**: `_id`, `user`, `description`, `tagNames[]`, `startTime`, `pausedDuration`, `isPaused`, `pausedAt`, `mode`, `pomodoroState`
+- **Template**: `_id`, `user`, `name`, `description`, `durationMinutes`, `tagNames[]`
 
 ## Running Locally
 

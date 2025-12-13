@@ -38,7 +38,11 @@ Create a new user account.
 **Success Response (201):**
 ```json
 {
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "user": {
+    "id": "507f1f77bcf86cd799439010",
+    "username": "john_doe"
+  }
 }
 ```
 
@@ -64,7 +68,11 @@ Authenticate user.
 **Success Response (200):**
 ```json
 {
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "user": {
+    "id": "507f1f77bcf86cd799439010",
+    "username": "john_doe"
+  }
 }
 ```
 
@@ -197,6 +205,31 @@ Get all tags for authenticated user.
   }
 ]
 ```
+
+---
+
+### DELETE `/tags/:id`
+
+Delete a tag (category).
+
+**Headers:** `Authorization: Bearer <token>`
+
+**URL Parameters:**
+| Param | Type | Description |
+|-------|------|-------------|
+| `id` | string | Tag ObjectId |
+
+**Success Response (200):**
+```json
+{
+  "message": "Tag deleted"
+}
+```
+
+**Error Responses:**
+| Code | Body |
+|------|------|
+| 404 | `{ "error": "Tag not found" }` |
 
 ---
 
@@ -464,7 +497,7 @@ Create a new template.
 **Error Responses:**
 | Code | Body |
 |------|------|
-| 400 | `{ "error": "Name and description are required" }` |
+| 400 | `{ "error": "Name, description and duration required" }` |
 
 ---
 
