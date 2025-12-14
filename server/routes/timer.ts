@@ -141,7 +141,7 @@ timer.post('/resume', async (c) => {
 // Stop the timer and create an activity
 timer.post('/stop', async (c) => {
     const user = c.get('user');
-    const { createActivity } = await c.req.json().catch(() => ({ createActivity: true }));
+    const { createActivity, date } = await c.req.json().catch(() => ({ createActivity: true, date: null }));
 
     const activeTimer = await Timer.findOne({ user: user.id });
 
@@ -177,10 +177,13 @@ timer.post('/stop', async (c) => {
             }
         }
 
+        // Use provided date or fall back to timer startTime
+        const activityDate = date ? new Date(date) : activeTimer.startTime;
+
         const newActivity = new Activity({
             description: activeTimer.description,
             durationMinutes,
-            date: activeTimer.startTime,
+            date: activityDate,
             tags: tagIds,
             user: user.id
         });

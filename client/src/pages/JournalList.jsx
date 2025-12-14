@@ -1,16 +1,43 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect, useMemo } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Trash2 } from 'lucide-react';
 import { API_URL } from '../config';
 import ConfirmDialog from '../components/ConfirmDialog';
 
 const JournalList = () => {
     const navigate = useNavigate();
+    const location = useLocation();
+    const query = new URLSearchParams(location.search);
+
+    // Initialize date range from URL params or defaults (last 7 days)
+    const [dateRange, setDateRange] = useState({
+        start: query.get('start') || new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+        end: query.get('end') || new Date().toISOString().split('T')[0]
+    });
+
     const [journals, setJournals] = useState([]);
     const [loading, setLoading] = useState(true);
     const [deleteTarget, setDeleteTarget] = useState(null);
     const [isDeleting, setIsDeleting] = useState(false);
     const token = localStorage.getItem('token');
+
+    // Helper to update URL when range changes
+    const updateRange = (days) => {
+        const end = new Date();
+        const start = new Date();
+        start.setDate(end.getDate() - days + 1);
+
+        const startStr = start.toISOString().split('T')[0];
+        const endStr = end.toISOString().split('T')[0];
+
+        setDateRange({ start: startStr, end: endStr });
+        navigate(`/journals?start=${startStr}&end=${endStr}`);
+    };
+
+    const setCustomRange = (start, end) => {
+        setDateRange({ start, end });
+        navigate(`/journals?start=${start}&end=${end}`);
+    };
 
     useEffect(() => {
         fetchJournals();
@@ -32,6 +59,14 @@ const JournalList = () => {
             setLoading(false);
         }
     };
+
+    // Filter journals by date range
+    const filteredJournals = useMemo(() => {
+        return journals.filter(j => {
+            const dateStr = new Date(j.createdAt).toISOString().split('T')[0];
+            return dateStr >= dateRange.start && dateStr <= dateRange.end;
+        });
+    }, [journals, dateRange.start, dateRange.end]);
 
     const handleDeleteClick = (e, journal) => {
         e.preventDefault();
@@ -80,10 +115,23 @@ const JournalList = () => {
     return (
         <div className="journal-list-page" style={pageStyle}>
             <header style={headerStyle}>
-                <h1 style={titleStyle}>Journal Entries</h1>
-                <button onClick={() => navigate('/')} style={backBtnStyle}>
-                    ← Back to Dashboard
-                </button>
+                <div style={headerTopRow}>
+                    <h1 style={titleStyle}>Journal Entries</h1>
+                    <button onClick={() => navigate('/')} style={backBtnStyle}>
+                        ← Back to Dashboard
+                    </button>
+                </div>
+                <div className="controls" style={controlsStyle}>
+                    <div style={{ display: 'flex', gap: '8px' }}>
+                        <button onClick={() => updateRange(3)} style={btnStyle}>Last 3 Days</button>
+                        <button onClick={() => updateRange(7)} style={btnStyle}>Last 7 Days</button>
+                        <button onClick={() => updateRange(30)} style={btnStyle}>Last 30 Days</button>
+                    </div>
+                    <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+                        <label style={labelStyle}>Start: <input type="date" value={dateRange.start} onChange={e => setCustomRange(e.target.value, dateRange.end)} style={inputStyle} /></label>
+                        <label style={labelStyle}>End: <input type="date" value={dateRange.end} onChange={e => setCustomRange(dateRange.start, e.target.value)} style={inputStyle} /></label>
+                    </div>
+                </div>
             </header>
 
             {loading ? (
@@ -91,13 +139,13 @@ const JournalList = () => {
                     <div style={spinnerStyle}></div>
                     Loading journals...
                 </div>
-            ) : journals.length === 0 ? (
+            ) : filteredJournals.length === 0 ? (
                 <div style={emptyStyle}>
-                    No journal entries yet. Go back to the dashboard and create your first entry!
+                    No journal entries found for this period. Try selecting a different date range.
                 </div>
             ) : (
                 <div className="journals-grid" style={gridStyle}>
-                    {journals.map(journal => (
+                    {filteredJournals.map(journal => (
                         <div key={journal._id} className="journal-card" style={cardStyle}>
                             <div style={cardHeader}>
                                 <span style={dateStyle}>{formatDate(journal.createdAt)}</span>
@@ -145,12 +193,51 @@ const pageStyle = {
 const headerStyle = {
     marginBottom: '32px',
     paddingBottom: '24px',
-    borderBottom: '1px solid rgba(255,255,255,0.1)',
+    borderBottom: '1px solid rgba(255,255,255,0.1)'
+};
+
+const headerTopRow = {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
+    marginBottom: '20px'
+};
+
+const controlsStyle = {
+    display: 'flex',
+    gap: '16px',
     flexWrap: 'wrap',
-    gap: '16px'
+    alignItems: 'center',
+    justifyContent: 'space-between'
+};
+
+const btnStyle = {
+    padding: '10px 20px',
+    border: '1px solid rgba(255,255,255,0.15)',
+    backgroundColor: 'rgba(255,255,255,0.05)',
+    borderRadius: '50px',
+    cursor: 'pointer',
+    fontSize: '0.85rem',
+    transition: 'all 0.2s',
+    color: 'rgba(255,255,255,0.8)',
+    fontWeight: '500'
+};
+
+const labelStyle = {
+    fontSize: '0.85rem',
+    color: 'rgba(255,255,255,0.6)',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px'
+};
+
+const inputStyle = {
+    padding: '8px 12px',
+    border: '1px solid rgba(255,255,255,0.15)',
+    borderRadius: '8px',
+    background: 'rgba(255,255,255,0.05)',
+    color: '#fff',
+    colorScheme: 'dark'
 };
 
 const titleStyle = {

@@ -5,13 +5,14 @@ import Timer from './Timer';
 import Journal from './Journal';
 import '../suggestions.css';
 
-const ActivityLogger = ({ onActivityLogged, onJournalCreated }) => {
+const ActivityLogger = ({ onActivityLogged, onJournalCreated, selectedDate, onDateChange }) => {
     const [mode, setMode] = useState('manual'); // 'manual', 'timer', or 'journal'
     const [description, setDescription] = useState('');
     const [duration, setDuration] = useState('');
     const [tags, setTags] = useState('');
     const [availableTags, setAvailableTags] = useState([]);
     const [suggestions, setSuggestions] = useState([]);
+    const [localDate, setLocalDate] = useState(selectedDate || new Date().toISOString().split('T')[0]);
     const { user } = useAuth();
     const token = localStorage.getItem('token');
 
@@ -80,7 +81,8 @@ const ActivityLogger = ({ onActivityLogged, onJournalCreated }) => {
                 body: JSON.stringify({
                     description,
                     durationMinutes: parseInt(duration),
-                    tagNames: tagList
+                    tagNames: tagList,
+                    date: localDate
                 })
             });
 
@@ -97,8 +99,25 @@ const ActivityLogger = ({ onActivityLogged, onJournalCreated }) => {
         }
     };
 
+    const handleDateChange = (e) => {
+        const newDate = e.target.value;
+        setLocalDate(newDate);
+        if (onDateChange) onDateChange(newDate);
+    };
+
     return (
         <div className="logger-container">
+            <div className="logger-date-picker">
+                <label>
+                    Date:
+                    <input
+                        type="date"
+                        value={localDate}
+                        onChange={handleDateChange}
+                        className="date-input"
+                    />
+                </label>
+            </div>
             <div className="logger-mode-toggle">
                 <button
                     type="button"
@@ -124,14 +143,19 @@ const ActivityLogger = ({ onActivityLogged, onJournalCreated }) => {
             </div>
 
             {mode === 'timer' ? (
-                <Timer onActivityLogged={() => {
-                    fetchTags();
-                    if (onActivityLogged) onActivityLogged();
-                }} />
+                <Timer
+                    selectedDate={localDate}
+                    onActivityLogged={() => {
+                        fetchTags();
+                        if (onActivityLogged) onActivityLogged();
+                    }}
+                />
             ) : mode === 'journal' ? (
-                <Journal onJournalCreated={() => {
-                    if (onJournalCreated) onJournalCreated();
-                }} />
+                <Journal
+                    selectedDate={localDate}
+                    onJournalCreated={() => {
+                        if (onJournalCreated) onJournalCreated();
+                    }} />
             ) : (
                 <>
                     <h3>Log Activity</h3>

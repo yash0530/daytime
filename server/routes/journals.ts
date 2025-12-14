@@ -29,17 +29,24 @@ journals.post('/', async (c) => {
     try {
         const user = c.get('user');
         const body = await c.req.json();
-        const { content, category } = body;
+        const { content, category, createdAt } = body;
 
         if (!content) {
             return c.json({ error: 'Content is required' }, 400);
         }
 
-        const journal = new Journal({
+        const journalData: any = {
             content,
             category: category || '',
             user: user.id
-        });
+        };
+
+        // If custom date is provided, set it
+        if (createdAt) {
+            journalData.createdAt = new Date(createdAt);
+        }
+
+        const journal = new Journal(journalData);
 
         await journal.save();
         return c.json(journal, 201);

@@ -11,7 +11,8 @@ Daytime is a premium, mobile-friendly time tracking application with a modern da
 - **User Isolation**: Private data per user
 
 ### 2. Activity Logging
-- **Activity Input**: Description, duration (minutes), and category
+- **Activity Input**: Description, duration (minutes), category, and **date**
+- **Date Picker**: Select any date for activity logging (defaults to today)
 - **Smart Categories**: Auto-created on first use with autocomplete suggestions
 - **Activity Management**: 
   - Sleek activity cards with hover effects
@@ -19,6 +20,7 @@ Daytime is a premium, mobile-friendly time tracking application with a modern da
 
 ### 3. Timer / Stopwatch Mode
 - **Real-time Tracking**: Start/stop timer instead of manual duration entry
+- **Date Selection**: Choose date for timer activity (uses selected date when stopped)
 - **Pause/Resume**: Full timer control with state persistence
 - **Background Persistence**: Timer survives page refreshes via localStorage + server sync
 - **Pomodoro Mode**: Optional 25min work / 5min break cycles with session tracking
@@ -32,17 +34,19 @@ Daytime is a premium, mobile-friendly time tracking application with a modern da
 
 ### 5. Journal / Note-Taking
 - **Journal Tab**: Third tab in Activity Logger for quick note-taking
+- **Date Selection**: Choose date for journal entries (defaults to today)
 - **Journal Entries**: Write thoughts, ideas, or notes with optional category
 - **Category Autocomplete**: Reuse existing categories for organization
-- **Journal View**: Dedicated page (`/journals`) showing all entries
-- **Chronological Order**: Entries displayed newest first
+- **Journal View**: Dedicated page (`/journals`) with **date range filtering**
+- **Time Range Selection**: Last 3/7/30 days or custom date range for journal view
 - **Delete Support**: Remove journal entries with confirmation
 
 ### 6. Dashboard (`/`)
+- **Date Range Filter**: Filter all dashboard data by start/end date
 - **Calendar View**: Monthly grid with activity indicators and color dots
-- **Time by Category**: Bar chart showing minutes per category
-- **Activity Over Time**: Line chart showing daily productivity trends
-- **Recent Activities**: Scrollable list with save-template/delete actions
+- **Time by Category**: Bar chart showing minutes per category (filtered)
+- **Activity Over Time**: Line chart showing daily trends (filtered)
+- **Recent Activities**: Scrollable list filtered by date range
 - **Quick Actions**: Templates section for fast activity logging
 
 ### 7. Analytics Dashboard (`/visualize`)

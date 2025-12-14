@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { API_URL } from '../config';
 
-const Journal = ({ onJournalCreated }) => {
+const Journal = ({ onJournalCreated, selectedDate }) => {
     const [content, setContent] = useState('');
     const [category, setCategory] = useState('');
     const [loading, setLoading] = useState(false);
@@ -60,7 +60,8 @@ const Journal = ({ onJournalCreated }) => {
                 },
                 body: JSON.stringify({
                     content: content.trim(),
-                    category: category.trim()
+                    category: category.trim(),
+                    createdAt: selectedDate
                 })
             });
 

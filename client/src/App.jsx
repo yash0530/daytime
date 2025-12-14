@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { API_URL } from './config';
 import { AuthProvider, useAuth } from './context/AuthContext';
@@ -45,6 +45,14 @@ const Dashboard = () => {
     fetchActivities();
   }, [refreshTrigger, token]);
 
+  // Filter activities by date range
+  const filteredActivities = useMemo(() => {
+    return activities.filter(a => {
+      const dateStr = new Date(a.date).toISOString().split('T')[0];
+      return dateStr >= startDate && dateStr <= endDate;
+    });
+  }, [activities, startDate, endDate]);
+
   const handleActivityDeleted = (id) => {
     // Optimistic update
     setActivities(prev => prev.filter(a => a._id !== id));
@@ -53,6 +61,16 @@ const Dashboard = () => {
     setTimeout(() => {
       setRefreshTrigger(c => c + 1);
     }, 500);
+  };
+
+  // Helper to update date range with preset
+  const updateRange = (days) => {
+    const end = new Date();
+    const start = new Date();
+    start.setDate(end.getDate() - days + 1);
+
+    setStartDate(start.toISOString().split('T')[0]);
+    setEndDate(end.toISOString().split('T')[0]);
   };
 
   return (
@@ -66,6 +84,11 @@ const Dashboard = () => {
       </header>
       <main className="dashboard-content">
         <section className="viz-controls">
+          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+            <button onClick={() => updateRange(3)} className="btn-pill btn-secondary">Last 3 Days</button>
+            <button onClick={() => updateRange(7)} className="btn-pill btn-secondary">Last 7 Days</button>
+            <button onClick={() => updateRange(30)} className="btn-pill btn-secondary">Last 30 Days</button>
+          </div>
           <div style={{ display: 'flex', gap: '12px', alignItems: 'center', flexWrap: 'wrap' }}>
             <label>Start: <input type="date" value={startDate} onChange={e => setStartDate(e.target.value)} /></label>
             <label>End: <input type="date" value={endDate} onChange={e => setEndDate(e.target.value)} /></label>
@@ -74,13 +97,17 @@ const Dashboard = () => {
             <button onClick={() => window.open(`/visualize?start=${startDate}&end=${endDate}`, '_blank')}>
               View Analytics
             </button>
-            <button onClick={() => window.open('/journals', '_blank')}>
+            <button onClick={() => window.open(`/journals?start=${startDate}&end=${endDate}`, '_blank')}>
               View Journals
             </button>
           </div>
         </section>
         <section className="logger-section">
-          <ActivityLogger onActivityLogged={() => setRefreshTrigger(c => c + 1)} />
+          <ActivityLogger
+            selectedDate={endDate}
+            onDateChange={(date) => setEndDate(date)}
+            onActivityLogged={() => setRefreshTrigger(c => c + 1)}
+          />
         </section>
 
         {/* Quick Actions Section */}
@@ -97,18 +124,18 @@ const Dashboard = () => {
             <CalendarView activities={activities} />
           </section>
           <section className="stats-section">
-            <CategoryChart activities={activities} />
+            <CategoryChart activities={filteredActivities} />
           </section>
         </div>
 
         {/* Activity Timeline full width */}
         <section className="timeline-section">
-          <ActivityTimeline activities={activities} />
+          <ActivityTimeline activities={filteredActivities} />
         </section>
 
         <section className="list-section">
           <ActivityList
-            activities={activities}
+            activities={filteredActivities}
             onActivityDeleted={handleActivityDeleted}
             onTemplateCreated={() => setTemplateRefreshTrigger(c => c + 1)}
           />

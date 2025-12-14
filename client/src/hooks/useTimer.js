@@ -208,7 +208,7 @@ export const useTimer = () => {
     }, [token, saveToStorage]);
 
     // Stop timer
-    const stopTimer = useCallback(async (createActivity = true) => {
+    const stopTimer = useCallback(async (createActivity = true, date = null) => {
         if (!token) return { error: 'Not authenticated' };
 
         try {
@@ -218,7 +218,7 @@ export const useTimer = () => {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
                 },
-                body: JSON.stringify({ createActivity })
+                body: JSON.stringify({ createActivity, date })
             });
 
             const data = await res.json();

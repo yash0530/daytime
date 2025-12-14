@@ -3,7 +3,7 @@ import { useTimer } from '../hooks/useTimer';
 import { API_URL } from '../config';
 import '../suggestions.css';
 
-const Timer = ({ onActivityLogged }) => {
+const Timer = ({ onActivityLogged, selectedDate }) => {
     const {
         active,
         description: timerDescription,
@@ -127,7 +127,7 @@ const Timer = ({ onActivityLogged }) => {
             await updateTimer(description, getTagList());
         }
 
-        const result = await stopTimer(true);
+        const result = await stopTimer(true, selectedDate);
         if (result.error) {
             setLocalError(result.error);
         } else {

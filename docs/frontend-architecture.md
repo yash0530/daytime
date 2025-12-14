@@ -84,6 +84,8 @@ JournalList
 |------|------|-------------|
 | `onActivityLogged` | `() => void` | Callback when activity is created |
 | `onJournalCreated` | `() => void` | Callback when journal is created |
+| `selectedDate` | `string` | Pre-selected date (YYYY-MM-DD format) |
+| `onDateChange` | `(date: string) => void` | Callback when date is changed |
 
 **State**:
 ```javascript
@@ -92,12 +94,14 @@ JournalList
   description: string,                    // Activity description
   duration: string,                       // Duration in minutes
   tags: string,                           // Comma-separated categories
+  localDate: string,                      // Selected date for entries
   availableTags: Tag[],                   // Fetched from API
   suggestions: Tag[]                      // Filtered suggestions
 }
 ```
 
 **Features**:
+- Date picker above mode toggle (shared across all modes)
 - Mode toggle between Manual Entry, Timer Mode, and Journal
 - Tag autocomplete with color indicators
 - Form validation
@@ -114,6 +118,7 @@ JournalList
 | Prop | Type | Description |
 |------|------|-------------|
 | `onActivityLogged` | `() => void` | Callback when timer stopped |
+| `selectedDate` | `string` | Date to use for activity creation (YYYY-MM-DD) |
 
 **Uses**: `useTimer` hook for all timer logic
 
@@ -145,6 +150,7 @@ stateDiagram-v2
 | Prop | Type | Description |
 |------|------|-------------|
 | `onJournalCreated` | `() => void` | Callback when journal is saved |
+| `selectedDate` | `string` | Date to attach to journal entry (YYYY-MM-DD) |
 
 **State**:
 ```javascript
