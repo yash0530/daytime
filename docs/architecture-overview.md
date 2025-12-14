@@ -70,6 +70,7 @@ daytime/
 │   │   ├── components/        # Reusable UI components
 │   │   │   ├── ActivityList.jsx
 │   │   │   ├── ActivityLogger.jsx
+│   │   │   ├── AnalyticsCharts.jsx  # Dashboard chart components
 │   │   │   ├── CalendarView.jsx
 │   │   │   ├── ConfirmDialog.jsx
 │   │   │   ├── CreateTemplateModal.jsx
@@ -85,8 +86,7 @@ daytime/
 │   │   ├── pages/             # Route-level components
 │   │   │   ├── JournalList.jsx
 │   │   │   ├── Login.jsx
-│   │   │   ├── Register.jsx
-│   │   │   └── Visualization.jsx
+│   │   │   └── Register.jsx
 │   │   ├── App.jsx            # Root component & routing
 │   │   ├── config.js          # API URL configuration
 │   │   ├── index.css          # Global styles

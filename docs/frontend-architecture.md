@@ -17,7 +17,7 @@ flowchart TB
         Login["/login"]
         Register["/register"]
         Dashboard["/"]
-        Viz["/visualize"]
+        Journals["/journals"]
     end
 
     subgraph Components
@@ -255,11 +255,12 @@ stateDiagram-v2
 | Prop | Type | Description |
 |------|------|-------------|
 | `activities` | `Activity[]` | Activities to display |
+| `onDayClick` | `(dateStr: string) => void` | Optional callback when clicking a day with activities |
 
 **Features**:
 - Month navigation
 - Day cells with colored dots per activity
-- Today highlight
+- Clickable days to filter dashboard charts by date
 - Total minutes per day
 
 ---
@@ -422,6 +423,12 @@ flowchart TD
   <Route path="/" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
 </Routes>
 ```
+
+**Pages**:
+- `/login` - User authentication
+- `/register` - New user registration  
+- `/journals` - Journal entries list with date range filtering
+- `/` - Main dashboard with activity logging, calendar, and analytics charts
 
 **PrivateRoute**:
 - Checks `AuthContext.user`
