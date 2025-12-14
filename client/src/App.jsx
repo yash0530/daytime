@@ -4,12 +4,11 @@ import { API_URL } from './config';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import Login from './pages/Login';
 import Register from './pages/Register';
-import Visualization from './pages/Visualization';
 import JournalList from './pages/JournalList';
 import ActivityLogger from './components/ActivityLogger';
 import ActivityList from './components/ActivityList';
 import CalendarView from './components/CalendarView';
-import { CategoryChart, ActivityTimeline } from './components/StatsView';
+import { ActivityByDayChart, CategoryDonutChart, ProductivityTrendsChart, CategoryBreakdownChart } from './components/AnalyticsCharts';
 import TemplateList from './components/TemplateList';
 import './App.css';
 
@@ -54,21 +53,16 @@ const Dashboard = () => {
   }, [activities, startDate, endDate]);
 
   const handleActivityDeleted = (id) => {
-    // Optimistic update
     setActivities(prev => prev.filter(a => a._id !== id));
-
-    // Delayed refetch to allow DB consistency to settle while keeping UI responsive
     setTimeout(() => {
       setRefreshTrigger(c => c + 1);
     }, 500);
   };
 
-  // Helper to update date range with preset
   const updateRange = (days) => {
     const end = new Date();
     const start = new Date();
     start.setDate(end.getDate() - days + 1);
-
     setStartDate(start.toISOString().split('T')[0]);
     setEndDate(end.toISOString().split('T')[0]);
   };
@@ -94,14 +88,12 @@ const Dashboard = () => {
             <label>End: <input type="date" value={endDate} onChange={e => setEndDate(e.target.value)} /></label>
           </div>
           <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-            <button onClick={() => window.open(`/visualize?start=${startDate}&end=${endDate}`, '_blank')}>
-              View Analytics
-            </button>
             <button onClick={() => window.open(`/journals?start=${startDate}&end=${endDate}`, '_blank')}>
               View Journals
             </button>
           </div>
         </section>
+
         <section className="logger-section">
           <ActivityLogger
             selectedDate={endDate}
@@ -110,7 +102,6 @@ const Dashboard = () => {
           />
         </section>
 
-        {/* Quick Actions Section */}
         <section className="quick-actions-section">
           <TemplateList
             key={templateRefreshTrigger}
@@ -118,20 +109,36 @@ const Dashboard = () => {
           />
         </section>
 
-        {/* Calendar + Category Chart side by side */}
-        <div className="viz-grid">
-          <section className="calendar-section">
-            <CalendarView activities={activities} />
-          </section>
-          <section className="stats-section">
-            <CategoryChart activities={filteredActivities} />
-          </section>
+        {/* Row 1: Calendar + Donut Chart - Equal width */}
+        <div className="viz-row">
+          <div className="viz-col">
+            <CalendarView
+              activities={activities}
+              onDayClick={(dateStr) => {
+                setStartDate(dateStr);
+                setEndDate(dateStr);
+              }}
+            />
+          </div>
+          <div className="viz-col">
+            <CategoryDonutChart activities={filteredActivities} dateRange={{ start: startDate, end: endDate }} />
+          </div>
         </div>
 
-        {/* Activity Timeline full width */}
-        <section className="timeline-section">
-          <ActivityTimeline activities={filteredActivities} />
-        </section>
+        {/* Row 2: Activity by Day + Summary Stats - Equal width */}
+        <div className="viz-row">
+          <div className="viz-col">
+            <ActivityByDayChart activities={filteredActivities} dateRange={{ start: startDate, end: endDate }} />
+          </div>
+          <div className="viz-col">
+            <CategoryBreakdownChart activities={filteredActivities} dateRange={{ start: startDate, end: endDate }} />
+          </div>
+        </div>
+
+        {/* Row 3: Productivity Trends - Full width */}
+        <div className="viz-full">
+          <ProductivityTrendsChart activities={filteredActivities} dateRange={{ start: startDate, end: endDate }} />
+        </div>
 
         <section className="list-section">
           <ActivityList
@@ -145,7 +152,6 @@ const Dashboard = () => {
   );
 };
 
-
 const App = () => {
   return (
     <AuthProvider>
@@ -153,24 +159,16 @@ const App = () => {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/visualize" element={
-            <PrivateRoute>
-              <Visualization />
-            </PrivateRoute>
-          } />
           <Route path="/journals" element={
             <PrivateRoute>
               <JournalList />
             </PrivateRoute>
           } />
-          <Route
-            path="/"
-            element={
-              <PrivateRoute>
-                <Dashboard />
-              </PrivateRoute>
-            }
-          />
+          <Route path="/" element={
+            <PrivateRoute>
+              <Dashboard />
+            </PrivateRoute>
+          } />
         </Routes>
       </Router>
     </AuthProvider>

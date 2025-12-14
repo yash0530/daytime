@@ -47,19 +47,13 @@ Dashboard
 ├── TemplateList
 │   └── CreateTemplateModal
 ├── CalendarView
-├── StatsView
+├── AnalyticsCharts
+│   ├── ActivityByDayChart
+│   ├── CategoryDonutChart
+│   └── ProductivityTrendsChart
 └── ActivityList
     ├── SaveTemplateModal
     └── ConfirmDialog
-```
-
-### Visualization Page
-```
-Visualization
-├── DateRangeSelector
-├── ActivityByDayChart
-├── TimeByCategory (Donut)
-└── ProductivityTrends (Area)
 ```
 
 ### JournalList Page
@@ -270,20 +264,45 @@ stateDiagram-v2
 
 ---
 
-### StatsView
+### AnalyticsCharts
 
-**File**: `components/StatsView.jsx`
+**File**: `components/AnalyticsCharts.jsx`
 
-**Purpose**: Dashboard charts using Recharts.
+**Purpose**: Dashboard analytics charts using Recharts.
 
-**Props**:
+**Exported Components**:
+
+#### ActivityByDayChart
 | Prop | Type | Description |
 |------|------|-------------|
-| `activities` | `Activity[]` | Data for charts |
+| `activities` | `Activity[]` | Data for chart |
+| `dateRange` | `{ start: string, end: string }` | Date range for x-axis |
 
-**Charts**:
-- **Time by Category**: Bar chart (category → minutes)
-- **Activity Over Time**: Line chart (date → minutes)
+Stacked bar chart showing hours per day with category breakdown.
+
+#### CategoryDonutChart
+| Prop | Type | Description |
+|------|------|-------------|
+| `activities` | `Activity[]` | Data for chart |
+| `dateRange` | `{ start: string, end: string }` | Date range filter |
+
+Donut/pie chart showing time distribution by category with percentage labels.
+
+#### ProductivityTrendsChart
+| Prop | Type | Description |
+|------|------|-------------|
+| `activities` | `Activity[]` | Data for chart |
+| `dateRange` | `{ start: string, end: string }` | Date range for x-axis |
+
+Stacked area chart showing activity patterns over time.
+
+#### CategoryBreakdownChart
+| Prop | Type | Description |
+|------|------|-------------|
+| `activities` | `Activity[]` | Data for chart |
+| `dateRange` | `{ start: string, end: string }` | Date range for calculations |
+
+Radial bar chart showing top 5 categories with summary stats (Total Hours, Daily Avg, Activity Count).
 
 ---
 
@@ -399,7 +418,6 @@ flowchart TD
 <Routes>
   <Route path="/login" element={<Login />} />
   <Route path="/register" element={<Register />} />
-  <Route path="/visualize" element={<PrivateRoute><Visualization /></PrivateRoute>} />
   <Route path="/journals" element={<PrivateRoute><JournalList /></PrivateRoute>} />
   <Route path="/" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
 </Routes>

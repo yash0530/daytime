@@ -1,11 +1,9 @@
 import React, { useState, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 
 
-const CalendarView = ({ activities }) => {
-    const navigate = useNavigate();
+const CalendarView = ({ activities, onDayClick }) => {
     const [currentDate, setCurrentDate] = useState(new Date());
 
     const daysInMonth = (date) => new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
@@ -29,8 +27,10 @@ const CalendarView = ({ activities }) => {
     const handleDayClick = (day) => {
         const clickedDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
         const dateStr = clickedDate.toISOString().split('T')[0];
-        // Navigate to analytics with this date as both start and end
-        window.open(`/visualize?start=${dateStr}&end=${dateStr}`, '_blank');
+        // Call the onDayClick callback if provided
+        if (onDayClick) {
+            onDayClick(dateStr);
+        }
     };
 
     const renderCells = () => {

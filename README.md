@@ -43,17 +43,17 @@ Daytime is a premium, mobile-friendly time tracking application with a modern da
 
 ### 6. Dashboard (`/`)
 - **Date Range Filter**: Filter all dashboard data by start/end date
+- **Time Range Presets**: Last 3/7/30 days buttons for quick filtering
 - **Calendar View**: Monthly grid with activity indicators and color dots
-- **Time by Category**: Bar chart showing minutes per category (filtered)
-- **Activity Over Time**: Line chart showing daily trends (filtered)
+  - Click any date to filter charts to that day
+- **Analytics Charts**:
+  - **Time by Category**: Donut chart showing time distribution with percentages
+  - **Activity by Day**: Stacked bar chart with per-category breakdown
+  - **Category Breakdown**: Radial bar chart with top categories + summary stats
+  - **Productivity Trends**: Area chart showing activity patterns over time
 - **Recent Activities**: Scrollable list filtered by date range
 - **Quick Actions**: Templates section for fast activity logging
 
-### 7. Analytics Dashboard (`/visualize`)
-- **Time Range Selector**: Last 3/7/30 days or custom date range
-- **Activity by Day**: Stacked bar chart with category breakdown
-- **Time by Category**: Donut chart showing time distribution
-- **Productivity Trends**: Area chart showing activity patterns
 
 ## Design System
 
