@@ -158,8 +158,8 @@ Tags are handled case-insensitively throughout the application via a pre-save ho
 - Ensures all tags have consistent format in the database
 
 **API Behavior:**
-- `GET /api/tags` returns deduplicated tags (aggregated case-insensitively)
-- `POST /api/tags/merge-duplicates` fixes existing malformed tags and merges duplicates
+
+- `GET /api/tags` returns all user tags (sorted alphabetically)
 - All frontend dropdowns display unique, lowercase tags with colors
 
 ### Color Generation
