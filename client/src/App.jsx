@@ -71,7 +71,7 @@ const Dashboard = () => {
   return (
     <div className="dashboard">
       <header className="dashboard-header">
-        <h1>Daytime</h1>
+        <h1>DayTime</h1>
         <div className="user-controls">
           <span>{user.username}</span>
           <button onClick={logout} className="logout-btn">Logout</button>
