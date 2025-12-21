@@ -54,6 +54,13 @@ Daytime is a premium, mobile-friendly time tracking application with a modern da
 - **Recent Activities**: Scrollable list filtered by date range
 - **Quick Actions**: Templates section for fast activity logging
 
+### 7. Goals & Targets
+- **Category Goals**: Set daily/weekly time targets per category (e.g., "8 hours work", "1 hour exercise")
+- **Visual Progress**: Progress bars showing current vs target time with percentages
+- **Streak Tracking**: Track consecutive days/weeks of meeting goals with 🔥 badges
+- **Goal Management**: Create, edit, and delete goals via modal interface
+- **Auto-Refresh**: Progress updates automatically when activities are logged
+
 
 ## Design System
 
@@ -114,6 +121,11 @@ Daytime is a premium, mobile-friendly time tracking application with a modern da
 | GET | `/api/journals` | Get user journals (desc sorted) |
 | POST | `/api/journals` | Create journal entry |
 | DELETE | `/api/journals/:id` | Delete journal entry |
+| GET | `/api/goals` | Get all goals with progress |
+| POST | `/api/goals` | Create a new goal |
+| PATCH | `/api/goals/:id` | Update goal target |
+| DELETE | `/api/goals/:id` | Delete a goal |
+| GET | `/api/goals/streaks` | Get streak data for active goals |
 
 ### Data Model
 - **User**: `_id`, `username`, `password` (bcrypt hashed)
@@ -122,6 +134,7 @@ Daytime is a premium, mobile-friendly time tracking application with a modern da
 - **Timer**: `_id`, `user`, `description`, `tagNames[]`, `startTime`, `pausedDuration`, `isPaused`, `pausedAt`, `mode`, `pomodoroState`
 - **Template**: `_id`, `user`, `name`, `description`, `durationMinutes`, `tagNames[]`
 - **Journal**: `_id`, `user`, `content`, `category`, `createdAt`, `updatedAt`
+- **Goal**: `_id`, `user`, `categoryName`, `targetMinutes`, `period` (daily/weekly), `isActive`
 
 ## Running Locally
 

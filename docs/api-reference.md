@@ -640,6 +640,157 @@ Delete a journal entry.
 
 ---
 
+## Goals Endpoints
+
+### GET `/goals`
+
+Get all goals for authenticated user with current progress.
+
+**Headers:** `Authorization: Bearer <token>`
+
+**Success Response (200):**
+```json
+[
+  {
+    "_id": "507f1f77bcf86cd799439017",
+    "categoryName": "Work",
+    "targetMinutes": 480,
+    "period": "daily",
+    "isActive": true,
+    "user": "507f1f77bcf86cd799439010",
+    "createdAt": "2024-01-15T10:00:00.000Z",
+    "currentMinutes": 240,
+    "streak": 5,
+    "percentComplete": 50
+  }
+]
+```
+
+---
+
+### POST `/goals`
+
+Create a new goal.
+
+**Headers:** `Authorization: Bearer <token>`
+
+**Request Body:**
+```json
+{
+  "categoryName": "Work",
+  "targetMinutes": 480,
+  "period": "daily"
+}
+```
+
+**Success Response (201):**
+```json
+{
+  "_id": "507f1f77bcf86cd799439017",
+  "categoryName": "Work",
+  "targetMinutes": 480,
+  "period": "daily",
+  "isActive": true,
+  "user": "507f1f77bcf86cd799439010",
+  "currentMinutes": 0,
+  "streak": 0,
+  "percentComplete": 0
+}
+```
+
+**Error Responses:**
+| Code | Body |
+|------|------|
+| 400 | `{ "error": "Category name, target minutes, and period are required" }` |
+| 400 | `{ "error": "A daily goal for \"Work\" already exists" }` |
+
+---
+
+### PATCH `/goals/:id`
+
+Update a goal's target.
+
+**Headers:** `Authorization: Bearer <token>`
+
+**URL Parameters:**
+| Param | Type | Description |
+|-------|------|-------------|
+| `id` | string | Goal ObjectId |
+
+**Request Body:**
+```json
+{
+  "targetMinutes": 600,
+  "isActive": true
+}
+```
+
+**Success Response (200):**
+```json
+{
+  "_id": "507f1f77bcf86cd799439017",
+  "categoryName": "Work",
+  "targetMinutes": 600,
+  "period": "daily",
+  "isActive": true,
+  "currentMinutes": 240,
+  "streak": 5,
+  "percentComplete": 40
+}
+```
+
+**Error Responses:**
+| Code | Body |
+|------|------|
+| 404 | `{ "error": "Goal not found" }` |
+
+---
+
+### DELETE `/goals/:id`
+
+Delete a goal.
+
+**Headers:** `Authorization: Bearer <token>`
+
+**URL Parameters:**
+| Param | Type | Description |
+|-------|------|-------------|
+| `id` | string | Goal ObjectId |
+
+**Success Response (200):**
+```json
+{
+  "message": "Goal deleted"
+}
+```
+
+**Error Responses:**
+| Code | Body |
+|------|------|
+| 404 | `{ "error": "Goal not found" }` |
+
+---
+
+### GET `/goals/streaks`
+
+Get streak data for all active goals.
+
+**Headers:** `Authorization: Bearer <token>`
+
+**Success Response (200):**
+```json
+[
+  {
+    "goalId": "507f1f77bcf86cd799439017",
+    "categoryName": "Work",
+    "period": "daily",
+    "streak": 5
+  }
+]
+```
+
+---
+
 ## Error Response Format
 
 All error responses follow this format:

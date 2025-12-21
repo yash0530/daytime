@@ -15,7 +15,7 @@ Users often track similar activities daily (work, exercise, reading). Allow:
 - Set up recurring activities that auto-populate
 - One-click "repeat yesterday" for routine days
 
-### 2. Goals & Targets
+### 2. Goals & Targets ✅ IMPLEMENTED
 **Complexity**: Medium | **Impact**: High
 
 Enable users to set time goals per category:

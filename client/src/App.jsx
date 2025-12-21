@@ -10,6 +10,7 @@ import ActivityList from './components/ActivityList';
 import CalendarView from './components/CalendarView';
 import { ActivityByDayChart, CategoryDonutChart, ProductivityTrendsChart, CategoryBreakdownChart } from './components/AnalyticsCharts';
 import TemplateList from './components/TemplateList';
+import GoalProgress from './components/GoalProgress';
 import './App.css';
 
 const PrivateRoute = ({ children }) => {
@@ -106,6 +107,13 @@ const Dashboard = () => {
           <TemplateList
             key={templateRefreshTrigger}
             onActivityCreated={() => setRefreshTrigger(c => c + 1)}
+          />
+        </section>
+
+        <section className="goals-progress-section">
+          <GoalProgress
+            activities={activities}
+            onGoalUpdated={() => setRefreshTrigger(c => c + 1)}
           />
         </section>
 

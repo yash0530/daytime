@@ -13,7 +13,7 @@ erDiagram
     USER ||--o| TIMER : has_active
     USER ||--o{ TEMPLATE : owns
     USER ||--o{ JOURNAL : writes
-    ACTIVITY }o--o{ TAG : categorized_by
+    USER ||--o{ GOAL : sets
 
     USER {
         ObjectId _id PK
@@ -74,6 +74,17 @@ erDiagram
         ObjectId user FK
         string content
         string category
+        Date createdAt
+        Date updatedAt
+    }
+
+    GOAL {
+        ObjectId _id PK
+        ObjectId user FK
+        string categoryName
+        number targetMinutes
+        string period
+        boolean isActive
         Date createdAt
         Date updatedAt
     }
@@ -313,6 +324,55 @@ const journalSchema = new mongoose.Schema({
 - Simple note-taking model with optional categorization
 - Category is a free-form string (not a reference to Tag model)
 - Sorted by `createdAt` descending for chronological view
+
+---
+
+## Goal Model
+
+**File**: `server/models/Goal.ts`
+
+```typescript
+const goalSchema = new mongoose.Schema({
+    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    categoryName: { type: String, required: true },
+    targetMinutes: { type: Number, required: true },
+    period: { type: String, enum: ['daily', 'weekly'], required: true },
+    isActive: { type: Boolean, default: true }
+}, { timestamps: true });
+
+// Compound index to prevent duplicate goals
+goalSchema.index({ user: 1, categoryName: 1, period: 1 }, { unique: true });
+```
+
+### Fields
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `_id` | ObjectId | Auto | Primary key |
+| `categoryName` | String | Yes | Category name to track (matches Tag names) |
+| `targetMinutes` | Number | Yes | Target time in minutes |
+| `period` | String | Yes | `daily` or `weekly` |
+| `isActive` | Boolean | No | Whether goal is currently tracked (default: true) |
+| `user` | ObjectId | Yes | Owner reference |
+| `createdAt` | Date | Auto | Creation timestamp |
+| `updatedAt` | Date | Auto | Last update timestamp |
+
+### Indexes
+- Compound `(user, categoryName, period)`: Unique - prevents duplicate goals
+
+### Progress Calculation
+Progress is calculated dynamically by aggregating activities:
+```typescript
+// Sum activities with matching tag for current period
+const tag = await Tag.findOne({ user: userId, name: goal.categoryName });
+const result = await Activity.aggregate([
+    { $match: { user: userId, tags: tag._id, date: { $gte: periodStart } } },
+    { $group: { _id: null, totalMinutes: { $sum: '$durationMinutes' } } }
+]);
+```
+
+### Streak Calculation
+Streaks count consecutive periods where target was met, going backwards from current period.
 
 ---
 

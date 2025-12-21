@@ -46,6 +46,8 @@ Dashboard
 │   └── Form (Manual Mode)
 ├── TemplateList
 │   └── CreateTemplateModal
+├── GoalProgress
+│   └── GoalManager
 ├── CalendarView
 ├── AnalyticsCharts
 │   ├── ActivityByDayChart
@@ -330,6 +332,54 @@ Radial bar chart showing top 5 categories with summary stats (Total Hours, Daily
 
 ---
 
+### GoalProgress
+
+**File**: `components/GoalProgress.jsx`
+
+**Purpose**: Display and manage time-tracking goals with progress visualization.
+
+**Props**:
+| Prop | Type | Description |
+|------|------|-------------|
+| `activities` | `Activity[]` | Activities for deriving category colors |
+| `onGoalUpdated` | `() => void` | Callback when goals are modified |
+
+**Features**:
+- Grid of goal cards with progress bars
+- Category color indicators matching existing tags
+- Streak badges (🔥) for consecutive periods of goal completion
+- Daily/weekly period badges
+- Edit and delete actions per goal
+- "Add Goal" button opens GoalManager modal
+- Auto-refresh when activities change
+
+**Uses**: `useGoals` hook for state management
+
+---
+
+### GoalManager
+
+**File**: `components/GoalManager.jsx`
+
+**Purpose**: Modal for creating and editing goals.
+
+**Props**:
+| Prop | Type | Description |
+|------|------|-------------|
+| `isOpen` | `boolean` | Visibility state |
+| `onClose` | `() => void` | Close handler |
+| `onCreated` | `(goal) => void` | Created/updated callback |
+| `existingGoal` | `Goal | null` | Goal to edit (null for create) |
+
+**Features**:
+- Category input with autocomplete suggestions from existing tags
+- Hours/minutes time picker for target
+- Period toggle (Daily / Weekly)
+- Pre-fills data when editing existing goal
+- Uses React Portal for proper z-index layering
+
+---
+
 ## Custom Hooks
 
 ### useTimer
@@ -383,6 +433,35 @@ flowchart TD
 - 1-second update interval for running timer
 - Automatic elapsed time calculation
 - Pause duration tracking
+
+---
+
+### useGoals
+
+**File**: `hooks/useGoals.js`
+
+**Purpose**: Encapsulates goal state management and API operations.
+
+**Returns**:
+```javascript
+{
+  // State
+  goals: Goal[],           // All user goals with progress
+  loading: boolean,
+  error: string | null,
+  
+  // Actions
+  createGoal: (categoryName, targetMinutes, period) => Promise<{success, goal?, error?}>,
+  updateGoal: (id, updates) => Promise<{success, goal?, error?}>,
+  deleteGoal: (id) => Promise<{success, error?}>,
+  refresh: () => Promise
+}
+```
+
+**Key Features**:
+- Auto-fetches goals on mount
+- Progress and streak data included in goal objects
+- Optimistic updates for state consistency
 
 ---
 
