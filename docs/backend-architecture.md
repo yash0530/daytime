@@ -95,12 +95,16 @@ flowchart LR
 3. Create Activity document with tag references
 4. Populate tags and return
 
-**Tag Auto-Creation:**
+**Tag Auto-Creation (Case-Insensitive):**
 ```typescript
 for (const tagName of tagNames) {
-    let tag = await Tag.findOne({ name: tagName, user: userId });
+    // Case-insensitive lookup using regex
+    let tag = await Tag.findOne({ 
+        name: { $regex: new RegExp(`^${tagName}$`, 'i') }, 
+        user: userId 
+    });
     if (!tag) {
-        const randomColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
+        const randomColor = '#' + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0');
         tag = new Tag({ name: tagName, user: userId, color: randomColor });
         await tag.save();
     }

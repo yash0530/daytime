@@ -149,6 +149,19 @@ const tagSchema = new mongoose.Schema({
 ### Indexes
 - Compound index on `(user, name)` recommended for lookups
 
+### Case-Insensitivity
+Tags are handled case-insensitively throughout the application via a pre-save hook:
+
+**Pre-Save Hook Behavior:**
+- Automatically converts tag names to lowercase before saving
+- Auto-generates random color if not provided
+- Ensures all tags have consistent format in the database
+
+**API Behavior:**
+- `GET /api/tags` returns deduplicated tags (aggregated case-insensitively)
+- `POST /api/tags/merge-duplicates` fixes existing malformed tags and merges duplicates
+- All frontend dropdowns display unique, lowercase tags with colors
+
 ### Color Generation
 Tags auto-created with random colors:
 ```typescript

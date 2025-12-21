@@ -186,19 +186,23 @@ Get all tags for authenticated user.
 
 **Headers:** `Authorization: Bearer <token>`
 
+**Notes:**
+- All tag names are stored in lowercase (enforced by pre-save hook)
+- Sorted alphabetically by name
+
 **Success Response (200):**
 ```json
 [
   {
     "_id": "507f1f77bcf86cd799439012",
-    "name": "Exercise",
+    "name": "exercise",
     "color": "#38ef7d",
     "user": "507f1f77bcf86cd799439010",
     "createdAt": "2024-01-10T10:00:00.000Z"
   },
   {
     "_id": "507f1f77bcf86cd799439013",
-    "name": "Work",
+    "name": "work",
     "color": "#667eea",
     "user": "507f1f77bcf86cd799439010",
     "createdAt": "2024-01-10T10:05:00.000Z"

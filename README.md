@@ -14,6 +14,7 @@ Daytime is a premium, mobile-friendly time tracking application with a modern da
 - **Activity Input**: Description, duration (minutes), category, and **date**
 - **Date Picker**: Select any date for activity logging (defaults to today)
 - **Smart Categories**: Auto-created on first use with autocomplete suggestions
+  - **Case-Insensitive**: "Exercise" and "exercise" are treated as the same category
 - **Activity Management**: 
   - Sleek activity cards with hover effects
   - **Delete Confirmation**: Animated modal with keyboard support
@@ -56,6 +57,7 @@ Daytime is a premium, mobile-friendly time tracking application with a modern da
 
 ### 7. Goals & Targets
 - **Category Goals**: Set daily/weekly time targets per category (e.g., "8 hours work", "1 hour exercise")
+- **Case-Insensitive Matching**: Goals match activities regardless of category casing
 - **Visual Progress**: Progress bars showing current vs target time with percentages
 - **Streak Tracking**: Track consecutive days/weeks of meeting goals with 🔥 badges
 - **Goal Management**: Create, edit, and delete goals via modal interface
@@ -79,6 +81,7 @@ Daytime is a premium, mobile-friendly time tracking application with a modern da
 - **Weights**: 400 (regular), 500 (medium), 600 (semi-bold), 700 (bold)
 
 ### Design Elements
+- **Consistent Theme**: Purple (`--primary-gradient`) as primary action color across all components
 - **Glassmorphism**: Blur effects with translucent backgrounds
 - **Gradients**: Purple-to-pink primary gradient
 - **Animations**: Smooth transitions (0.15s-0.5s) and hover effects
@@ -105,7 +108,7 @@ Daytime is a premium, mobile-friendly time tracking application with a modern da
 | GET | `/api/activities` | Get user activities |
 | POST | `/api/activities` | Create activity |
 | DELETE | `/api/activities/:id` | Delete activity |
-| GET | `/api/tags` | Get user categories |
+| GET | `/api/tags` | Get user categories (lowercase) |
 | DELETE | `/api/tags/:id` | Delete category |
 | GET | `/api/timer` | Get active timer state |
 | POST | `/api/timer/start` | Start new timer |

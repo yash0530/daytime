@@ -89,7 +89,7 @@ const Journal = ({ onJournalCreated, selectedDate }) => {
                     rows={5}
                     className="journal-textarea"
                 />
-                <div style={{ position: 'relative' }}>
+                <div className="category-input-wrapper">
                     <input
                         type="text"
                         placeholder="Category (e.g. Personal, Work, Ideas)"
@@ -99,17 +99,21 @@ const Journal = ({ onJournalCreated, selectedDate }) => {
                         className="journal-category-input"
                     />
                     {suggestions.length > 0 && (
-                        <ul className="suggestions-list">
+                        <div className="suggestions-dropdown">
                             {suggestions.map(tag => (
-                                <li
+                                <div
                                     key={tag._id}
+                                    className="suggestion-item"
                                     onClick={() => selectSuggestion(tag.name)}
-                                    style={{ borderLeft: `4px solid ${tag.color}` }}
                                 >
+                                    <span
+                                        className="tag-color-dot"
+                                        style={{ backgroundColor: tag.color }}
+                                    />
                                     {tag.name}
-                                </li>
+                                </div>
                             ))}
-                        </ul>
+                        </div>
                     )}
                 </div>
                 <button type="submit" disabled={loading || !content.trim()}>

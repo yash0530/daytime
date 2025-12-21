@@ -173,6 +173,32 @@ Import via Google Fonts:
 }
 ```
 
+### Section Cards (Templates, Goals)
+Section cards contain nested item cards with a consistent hover pattern:
+```css
+/* Container section */
+.section {
+  background: var(--bg-card);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  padding: 24px;
+}
+
+/* Nested items - transparent by default, subtle highlight on hover */
+.section-item {
+  background: transparent;
+  border: none;
+  border-radius: 16px;
+  padding: 20px;
+  transition: all var(--transition-fast);
+}
+
+.section-item:hover {
+  background: var(--bg-card-hover);
+}
+```
+
 ### Buttons
 
 **Primary Button:**

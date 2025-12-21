@@ -15,8 +15,8 @@
     top: 100%;
     left: 0;
     width: 100%;
-    z-index: 1000;
-    box-shadow: var(--shadow-md);
+    z-index: 9999;
+    box-shadow: var(--shadow-lg);
     box-sizing: border-box;
     backdrop-filter: blur(20px);
 }

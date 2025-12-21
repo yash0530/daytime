@@ -374,6 +374,8 @@ a:hover {
     border-radius: 20px;
     border: 1px solid var(--border-color);
     margin-bottom: 24px;
+    position: relative;
+    z-index: 100;
 }
 
 .logger-container h3 {
@@ -685,13 +687,12 @@ ul {
 
 /* ========== DELETE BUTTON ========== */
 .delete-btn {
-    background: rgba(245, 87, 108, 0.1);
+    background: transparent;
     border: none;
-    color: var(--error-color);
-    padding: 10px;
-    border-radius: 10px;
+    color: var(--text-secondary);
+    padding: 8px;
+    border-radius: 8px;
     cursor: pointer;
-    margin-left: 16px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -699,8 +700,9 @@ ul {
 }
 
 .delete-btn:hover {
-    background: rgba(245, 87, 108, 0.2);
-    transform: scale(1.1);
+    color: var(--error-color);
+    background: rgba(245, 87, 108, 0.1);
+    transform: none;
     box-shadow: none;
 }
 
@@ -1109,14 +1111,14 @@ ul {
 }
 
 .timer-btn.start {
-    background: var(--success-gradient);
+    background: var(--primary-gradient);
     color: white;
     border: none;
 }
 
 .timer-btn.start:hover {
     transform: translateY(-2px);
-    box-shadow: 0 0 20px rgba(56, 239, 125, 0.4);
+    box-shadow: var(--shadow-glow);
 }
 
 .timer-btn.pause {
@@ -1132,14 +1134,14 @@ ul {
 }
 
 .timer-btn.resume {
-    background: var(--success-gradient);
+    background: var(--primary-gradient);
     color: white;
     border: none;
 }
 
 .timer-btn.resume:hover {
     transform: translateY(-2px);
-    box-shadow: 0 0 20px rgba(56, 239, 125, 0.4);
+    box-shadow: var(--shadow-glow);
 }
 
 .timer-btn.stop {
@@ -1206,11 +1208,6 @@ ul {
 
 /* ========== QUICK ACTIONS SECTION ========== */
 .quick-actions-section {
-    background: var(--bg-card);
-    backdrop-filter: blur(20px);
-    padding: 24px;
-    border-radius: 20px;
-    border: 1px solid var(--border-color);
     margin-bottom: 24px;
 }
 
@@ -1252,11 +1249,21 @@ ul {
 }
 
 /* ========== TEMPLATE LIST ========== */
+.template-list {
+    position: relative;
+    z-index: 1;
+    background: var(--bg-card);
+    backdrop-filter: blur(20px);
+    padding: 24px;
+    border-radius: 20px;
+    border: 1px solid var(--border-color);
+}
+
 .template-list h3 {
-    font-size: 16px;
+    font-size: 18px;
     font-weight: 600;
     margin: 0;
-    color: var(--text-secondary);
+    color: var(--text-primary);
     display: flex;
     align-items: center;
 }
@@ -1272,20 +1279,20 @@ ul {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    background: var(--success-gradient);
+    background: var(--primary-gradient);
     color: white;
     border: none;
-    padding: 8px 14px;
-    border-radius: 10px;
-    font-size: 13px;
-    font-weight: 500;
+    padding: 10px 20px;
+    border-radius: 50px;
+    font-size: 14px;
+    font-weight: 600;
     cursor: pointer;
     transition: all var(--transition-fast);
 }
 
 .create-template-btn:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 0 15px rgba(56, 239, 125, 0.4);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-glow);
 }
 
 .modal-suggestions {
@@ -1317,12 +1324,11 @@ ul {
 
 .template-item {
     display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    background: rgba(255, 255, 255, 0.03);
+    flex-direction: column;
+    background: transparent;
     border: 1px solid var(--border-color);
-    border-radius: 14px;
-    padding: 16px;
+    border-radius: 16px;
+    padding: 20px;
     transition: all var(--transition-fast);
 }
 
@@ -1331,39 +1337,41 @@ ul {
     border-color: rgba(102, 126, 234, 0.3);
 }
 
-.template-content {
-    flex: 1;
-    min-width: 0;
-}
-
-.template-header {
+.template-card-header {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    margin-bottom: 6px;
+    margin-bottom: 16px;
+}
+
+.template-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
 }
 
 .template-name {
     font-weight: 600;
-    font-size: 14px;
+    font-size: 16px;
     color: var(--text-primary);
 }
 
 .template-duration {
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 500;
+    text-transform: uppercase;
     color: var(--accent-cyan);
     background: rgba(0, 212, 255, 0.1);
-    padding: 2px 8px;
-    border-radius: 10px;
+    padding: 3px 10px;
+    border-radius: 20px;
     white-space: nowrap;
-    margin-left: 8px;
 }
 
 .template-desc {
     font-size: 13px;
     color: var(--text-secondary);
-    margin-bottom: 8px;
+    padding: 5px 0;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -1385,27 +1393,27 @@ ul {
 
 .template-actions {
     display: flex;
-    flex-direction: column;
-    gap: 6px;
-    margin-left: 12px;
+    gap: 4px;
 }
 
 .use-template-btn {
-    background: var(--success-gradient);
-    color: white;
+    background: transparent;
+    border: none;
     padding: 8px;
     border-radius: 8px;
-    border: none;
     cursor: pointer;
-    display: inline-flex;
+    display: flex;
     align-items: center;
     justify-content: center;
+    color: var(--text-secondary);
     transition: all var(--transition-fast);
 }
 
 .use-template-btn:hover:not(:disabled) {
-    transform: scale(1.1);
-    box-shadow: 0 0 15px rgba(56, 239, 125, 0.4);
+    color: var(--accent-purple);
+    background: rgba(102, 126, 234, 0.1);
+    transform: none;
+    box-shadow: none;
 }
 
 .use-template-btn:disabled {
@@ -1688,7 +1696,7 @@ ul {
 }
 
 .goal-card {
-    background: rgba(255, 255, 255, 0.03);
+    background: transparent;
     border: 1px solid var(--border-color);
     border-radius: 16px;
     padding: 20px;
@@ -1751,19 +1759,30 @@ ul {
 .goal-action-btn {
     background: transparent;
     border: none;
-    padding: 6px;
+    padding: 8px;
     border-radius: 8px;
     cursor: pointer;
-    font-size: 14px;
-    opacity: 0.6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
     transition: all var(--transition-fast);
 }
 
 .goal-action-btn:hover {
-    opacity: 1;
     background: var(--bg-card);
     transform: none;
     box-shadow: none;
+}
+
+.goal-action-btn.edit:hover {
+    color: var(--accent-purple);
+    background: rgba(102, 126, 234, 0.1);
+}
+
+.goal-action-btn.delete:hover {
+    color: var(--error-color);
+    background: rgba(245, 87, 108, 0.1);
 }
 
 .goal-progress-container {
@@ -1965,8 +1984,8 @@ ul {
     border-radius: 12px;
     margin-top: 4px;
     overflow: hidden;
-    box-shadow: var(--shadow-md);
-    z-index: 10;
+    box-shadow: var(--shadow-lg);
+    z-index: 9999;
 }
 
 .suggestion-item {
@@ -1987,6 +2006,8 @@ ul {
     height: 10px;
     border-radius: 50%;
     flex-shrink: 0;
+    background-color: #667eea;
+    /* Default color if not set */
 }
 
 @keyframes progressPulse {

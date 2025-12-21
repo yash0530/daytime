@@ -187,10 +187,10 @@ goals.post('/', async (c) => {
         return c.json({ error: 'Period must be "daily" or "weekly"' }, 400);
     }
 
-    // Check for existing goal with same category and period
+    // Check for existing goal with same category and period (case-insensitive)
     const existing = await Goal.findOne({
         user: user.id,
-        categoryName,
+        categoryName: { $regex: new RegExp(`^${categoryName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`, 'i') },
         period
     });
 

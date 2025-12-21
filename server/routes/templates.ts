@@ -61,14 +61,15 @@ templates.post('/:id/use', async (c) => {
         return c.json({ error: 'Template not found' }, 404);
     }
 
-    // Find or create tags
+    // Find or create tags (simple lookup - tags stored lowercase via pre-save hook)
     const tagIds = [];
     if (template.tagNames && template.tagNames.length > 0) {
         for (const tagName of template.tagNames) {
-            let tag = await Tag.findOne({ name: tagName, user: user.id });
+            const normalizedName = tagName.toLowerCase().trim();
+            let tag = await Tag.findOne({ name: normalizedName, user: user.id });
             if (!tag) {
                 const randomColor = '#' + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0');
-                tag = new Tag({ name: tagName, user: user.id, color: randomColor });
+                tag = new Tag({ name: normalizedName, user: user.id, color: randomColor });
                 await tag.save();
             }
             tagIds.push(tag._id);

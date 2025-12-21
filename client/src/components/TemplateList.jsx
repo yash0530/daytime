@@ -122,44 +122,44 @@ const TemplateList = ({ onActivityCreated }) => {
                 <ul className="template-grid">
                     {templates.map((template) => (
                         <li key={template._id} className="template-item">
-                            <div className="template-content">
-                                <div className="template-header">
+                            <div className="template-card-header">
+                                <div className="template-info">
                                     <span className="template-name">{template.name}</span>
                                     <span className="template-duration">{template.durationMinutes} min</span>
                                 </div>
-                                <div className="template-desc">{template.description}</div>
-                                {template.tagNames && template.tagNames.length > 0 && (
-                                    <div className="template-tags">
-                                        {template.tagNames.map((tagName, idx) => (
-                                            <span key={idx} className="tag template-tag">
-                                                {tagName}
-                                            </span>
-                                        ))}
-                                    </div>
-                                )}
+                                <div className="template-actions">
+                                    <button
+                                        className="use-template-btn"
+                                        onClick={() => handleUseTemplate(template._id)}
+                                        disabled={usingTemplateId === template._id}
+                                        title="Use template"
+                                    >
+                                        {usingTemplateId === template._id ? (
+                                            <span className="loading-spinner"></span>
+                                        ) : (
+                                            <Play size={14} />
+                                        )}
+                                    </button>
+                                    <button
+                                        className="delete-btn"
+                                        onClick={(e) => handleDeleteClick(e, template)}
+                                        aria-label="Delete template"
+                                        title="Delete template"
+                                    >
+                                        <Trash2 size={14} />
+                                    </button>
+                                </div>
                             </div>
-                            <div className="template-actions">
-                                <button
-                                    className="use-template-btn"
-                                    onClick={() => handleUseTemplate(template._id)}
-                                    disabled={usingTemplateId === template._id}
-                                    title="Use template"
-                                >
-                                    {usingTemplateId === template._id ? (
-                                        <span className="loading-spinner"></span>
-                                    ) : (
-                                        <Play size={16} />
-                                    )}
-                                </button>
-                                <button
-                                    className="delete-btn"
-                                    onClick={(e) => handleDeleteClick(e, template)}
-                                    aria-label="Delete template"
-                                    title="Delete template"
-                                >
-                                    <Trash2 size={16} />
-                                </button>
-                            </div>
+                            <div className="template-desc">{template.description}</div>
+                            {template.tagNames && template.tagNames.length > 0 && (
+                                <div className="template-tags">
+                                    {template.tagNames.map((tagName, idx) => (
+                                        <span key={idx} className="tag template-tag">
+                                            {tagName}
+                                        </span>
+                                    ))}
+                                </div>
+                            )}
                         </li>
                     ))}
                 </ul>

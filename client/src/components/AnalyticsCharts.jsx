@@ -47,6 +47,7 @@ const useProcessedData = (activities, dateRange) => {
         const dailyMap = {};
         const tagMap = {};
         const allTags = new Set();
+        const tagDisplayNames = {}; // Map lowercase keys to original display names
 
         // Initialize daily map for the full range to ensure continuous x-axis
         let curr = new Date(dateRange.start);
@@ -61,8 +62,15 @@ const useProcessedData = (activities, dateRange) => {
             const dateStr = new Date(act.date).toISOString().split('T')[0];
             const durationHours = Number(act.durationMinutes) / 60;
 
-            // For Pie Chart
-            const tagName = (act.tags && act.tags[0] && act.tags[0].name) ? act.tags[0].name : 'Uncategorized';
+            // For Pie Chart - use case-insensitive aggregation
+            const rawTagName = (act.tags && act.tags[0] && act.tags[0].name) ? act.tags[0].name : 'Uncategorized';
+            const tagKey = rawTagName.toLowerCase();
+
+            // Store the first occurrence as the display name
+            if (!tagDisplayNames[tagKey]) {
+                tagDisplayNames[tagKey] = rawTagName;
+            }
+            const tagName = tagDisplayNames[tagKey];
 
             allTags.add(tagName);
 
@@ -235,10 +243,19 @@ export const CategoryBreakdownChart = ({ activities, dateRange }) => {
         const daysInRange = Math.max(1, Math.ceil((end - start) / (1000 * 60 * 60 * 24)) + 1);
         const avgPerDay = (totalMinutes / 60 / daysInRange).toFixed(1);
 
-        // Build category data for radial chart
+        // Build category data for radial chart (case-insensitive aggregation)
         const tagTotals = {};
+        const tagDisplayNames = {}; // Map lowercase keys to original display names
         activities.forEach(act => {
-            const tagName = (act.tags && act.tags[0] && act.tags[0].name) ? act.tags[0].name : 'Uncategorized';
+            const rawTagName = (act.tags && act.tags[0] && act.tags[0].name) ? act.tags[0].name : 'Uncategorized';
+            const tagKey = rawTagName.toLowerCase();
+
+            // Store the first occurrence as the display name
+            if (!tagDisplayNames[tagKey]) {
+                tagDisplayNames[tagKey] = rawTagName;
+            }
+            const tagName = tagDisplayNames[tagKey];
+
             if (!tagTotals[tagName]) tagTotals[tagName] = 0;
             tagTotals[tagName] += act.durationMinutes;
         });

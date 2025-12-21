@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { Target, Pencil, Trash2, Plus } from 'lucide-react';
 import { useGoals } from '../hooks/useGoals';
 import GoalManager from './GoalManager';
 import ConfirmDialog from './ConfirmDialog';
@@ -15,7 +16,7 @@ const formatTime = (minutes) => {
 const GoalCard = ({ goal, onEdit, onDelete, tagColors }) => {
     const percentage = goal.percentComplete;
     const isComplete = percentage >= 100;
-    const tagColor = tagColors[goal.categoryName] || '#667eea';
+    const tagColor = tagColors[goal.categoryName.toLowerCase()] || '#667eea';
 
     return (
         <div className={`goal-card ${isComplete ? 'complete' : ''}`}>
@@ -26,11 +27,11 @@ const GoalCard = ({ goal, onEdit, onDelete, tagColors }) => {
                     <span className="goal-period-badge">{goal.period}</span>
                 </div>
                 <div className="goal-actions">
-                    <button className="goal-action-btn" onClick={() => onEdit(goal)} title="Edit">
-                        ✏️
+                    <button className="goal-action-btn edit" onClick={() => onEdit(goal)} title="Edit">
+                        <Pencil size={14} />
                     </button>
-                    <button className="goal-action-btn" onClick={() => onDelete(goal)} title="Delete">
-                        🗑️
+                    <button className="goal-action-btn delete" onClick={() => onDelete(goal)} title="Delete">
+                        <Trash2 size={14} />
                     </button>
                 </div>
             </div>
@@ -70,13 +71,14 @@ const GoalProgress = ({ activities, onGoalUpdated }) => {
     const [deletingGoal, setDeletingGoal] = useState(null);
     const [deleteLoading, setDeleteLoading] = useState(false);
 
-    // Build a map of category names to colors from activities
+    // Build a map of category names to colors from activities (case-insensitive)
     const tagColors = useMemo(() => {
         const colors = {};
         activities.forEach(act => {
             act.tags?.forEach(tag => {
-                if (!colors[tag.name]) {
-                    colors[tag.name] = tag.color;
+                const tagKey = tag.name.toLowerCase();
+                if (!colors[tagKey]) {
+                    colors[tagKey] = tag.color;
                 }
             });
         });
@@ -127,9 +129,13 @@ const GoalProgress = ({ activities, onGoalUpdated }) => {
     return (
         <div className="goals-section">
             <div className="goals-header">
-                <h3>🎯 Goals & Targets</h3>
+                <h3>
+                    <Target size={18} style={{ marginRight: 8, verticalAlign: 'middle' }} />
+                    Goals & Targets
+                </h3>
                 <button className="btn-add-goal" onClick={openCreateModal}>
-                    + Add Goal
+                    <Plus size={14} style={{ marginRight: 4 }} />
+                    Add Goal
                 </button>
             </div>
 

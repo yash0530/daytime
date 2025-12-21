@@ -235,7 +235,7 @@ const Timer = ({ onActivityLogged, selectedDate }) => {
                     onChange={(e) => setDescription(e.target.value)}
                     disabled={active && !isPaused}
                 />
-                <div style={{ position: 'relative' }}>
+                <div className="category-input-wrapper">
                     <input
                         type="text"
                         placeholder="Category (e.g. Work, Exercise)"
@@ -243,20 +243,23 @@ const Timer = ({ onActivityLogged, selectedDate }) => {
                         onChange={handleTagChange}
                         autoComplete="off"
                         disabled={active && !isPaused}
-                        style={{ width: '100%', boxSizing: 'border-box' }}
                     />
                     {suggestions.length > 0 && (
-                        <ul className="suggestions-list">
+                        <div className="suggestions-dropdown">
                             {suggestions.map(tag => (
-                                <li
+                                <div
                                     key={tag._id}
+                                    className="suggestion-item"
                                     onClick={() => addSuggestion(tag.name)}
-                                    style={{ borderLeft: `4px solid ${tag.color}` }}
                                 >
+                                    <span
+                                        className="tag-color-dot"
+                                        style={{ backgroundColor: tag.color }}
+                                    />
                                     {tag.name}
-                                </li>
+                                </div>
                             ))}
-                        </ul>
+                        </div>
                     )}
                 </div>
             </div>

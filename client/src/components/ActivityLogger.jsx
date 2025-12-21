@@ -174,23 +174,30 @@ const ActivityLogger = ({ onActivityLogged, onJournalCreated, selectedDate, onDa
                             onChange={(e) => setDuration(e.target.value)}
                             required
                         />
-                        <div style={{ position: 'relative' }}>
+                        <div className="category-input-wrapper">
                             <input
                                 type="text"
                                 placeholder="Category (e.g. Work, Exercise, Learning)"
                                 value={tags}
                                 onChange={handleTagChange}
                                 autoComplete="off"
-                                style={{ width: '100%', boxSizing: 'border-box' }}
                             />
                             {suggestions.length > 0 && (
-                                <ul className="suggestions-list">
+                                <div className="suggestions-dropdown">
                                     {suggestions.map(tag => (
-                                        <li key={tag._id} onClick={() => addSuggestion(tag.name)} style={{ borderLeft: `4px solid ${tag.color}` }}>
+                                        <div
+                                            key={tag._id}
+                                            className="suggestion-item"
+                                            onClick={() => addSuggestion(tag.name)}
+                                        >
+                                            <span
+                                                className="tag-color-dot"
+                                                style={{ backgroundColor: tag.color }}
+                                            />
                                             {tag.name}
-                                        </li>
+                                        </div>
                                     ))}
-                                </ul>
+                                </div>
                             )}
                         </div>
                         <button type="submit">Log It</button>

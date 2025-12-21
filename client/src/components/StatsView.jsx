@@ -22,10 +22,17 @@ const axisTickStyle = {
 export const CategoryChart = ({ activities }) => {
     const dataByTag = useMemo(() => {
         const map = {};
+        const displayNames = {}; // Map lowercase keys to original display names
         activities.forEach(act => {
             act.tags.forEach(t => {
-                if (!map[t.name]) map[t.name] = { name: t.name, minutes: 0, fill: t.color };
-                map[t.name].minutes += act.durationMinutes;
+                const tagKey = t.name.toLowerCase();
+                // Store first occurrence as display name
+                if (!displayNames[tagKey]) {
+                    displayNames[tagKey] = t.name;
+                }
+                const displayName = displayNames[tagKey];
+                if (!map[displayName]) map[displayName] = { name: displayName, minutes: 0, fill: t.color };
+                map[displayName].minutes += act.durationMinutes;
             });
         });
         return Object.values(map);

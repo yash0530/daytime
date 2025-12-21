@@ -36,11 +36,13 @@ activities.post('/', async (c) => {
     const tagIds = [];
     if (tagNames && Array.isArray(tagNames)) {
         for (const tagName of tagNames) {
-            let tag = await Tag.findOne({ name: tagName, user: user.id });
+            const normalizedName = tagName.toLowerCase().trim();
+            // Simple lookup - tags are stored lowercase via pre-save hook
+            let tag = await Tag.findOne({ name: normalizedName, user: user.id });
             if (!tag) {
-                // Auto-create tag with a random color or default
-                const randomColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
-                tag = new Tag({ name: tagName, user: user.id, color: randomColor });
+                // Auto-create tag (pre-save hook will ensure lowercase and color)
+                const randomColor = '#' + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0');
+                tag = new Tag({ name: normalizedName, user: user.id, color: randomColor });
                 await tag.save();
             }
             tagIds.push(tag._id);

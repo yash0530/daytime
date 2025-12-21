@@ -10,9 +10,10 @@ const tags = new Hono<{ Variables: Variables }>();
 
 tags.use('*', authMiddleware);
 
+// Get all tags for the user
 tags.get('/', async (c) => {
     const user = c.get('user');
-    const userTags = await Tag.find({ user: user.id });
+    const userTags = await Tag.find({ user: user.id }).sort({ name: 1 });
     return c.json(userTags);
 });
 

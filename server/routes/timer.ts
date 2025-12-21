@@ -163,14 +163,15 @@ timer.post('/stop', async (c) => {
 
     // Create activity if requested and there's a description
     if (createActivity && activeTimer.description) {
-        // Handle tags similar to activities route
+        // Handle tags (simple lookup - tags stored lowercase via pre-save hook)
         const tagIds = [];
         if (activeTimer.tagNames && activeTimer.tagNames.length > 0) {
             for (const tagName of activeTimer.tagNames) {
-                let tag = await Tag.findOne({ name: tagName, user: user.id });
+                const normalizedName = tagName.toLowerCase().trim();
+                let tag = await Tag.findOne({ name: normalizedName, user: user.id });
                 if (!tag) {
                     const randomColor = '#' + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0');
-                    tag = new Tag({ name: tagName, user: user.id, color: randomColor });
+                    tag = new Tag({ name: normalizedName, user: user.id, color: randomColor });
                     await tag.save();
                 }
                 tagIds.push(tag._id);
